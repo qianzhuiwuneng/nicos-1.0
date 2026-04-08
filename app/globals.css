@@ -1,0 +1,212 @@
+@import "tailwindcss";
+
+/* Notion-like neutrals + soft playful accents */
+:root {
+  color-scheme: light;
+  --foreground: #37352f;
+  --foreground-soft: rgba(55, 53, 47, 0.65);
+  --sidebar-bg: #ffffff;
+  --background: #ffffff;
+  --card: #ffffff;
+  --card-foreground: #37352f;
+  --muted: rgba(55, 53, 47, 0.08);
+  --muted-foreground: #6f6f6f;
+  --border: #e5e5e5;
+  --border-subtle: #f0f0f0;
+  /* Friendly blue — links & focus, a little brighter than Notion but still calm */
+  --primary: #4c6ef5;
+  --primary-foreground: #ffffff;
+  --accent: rgba(55, 53, 47, 0.06);
+  --accent-foreground: #37352f;
+  /* Whimsy: soft pastels for tiny highlights (not loud) */
+  --whimsy-peach: #fff4ef;
+  --whimsy-sky: #eef4ff;
+  --whimsy-mint: #eefaf6;
+  --shadow-card: 0 1px 2px rgba(15, 15, 15, 0.04), 0 0 0 1px rgba(15, 15, 15, 0.04);
+  --shadow-float: 0 4px 12px rgba(15, 15, 15, 0.06);
+  --radius: 0.625rem;
+  --radius-sm: 0.4375rem;
+  --radius-pill: 9999px;
+  --content-width: 42rem;
+  --content-width-wide: 56rem;
+  --line-height-tight: 1.35;
+  --line-height-normal: 1.55;
+  --line-height-relaxed: 1.7;
+}
+
+html.dark {
+  color-scheme: dark;
+  --foreground: #e8e6e3;
+  --foreground-soft: rgba(232, 230, 227, 0.7);
+  --sidebar-bg: #252423;
+  --background: #1e1e1e;
+  --card: #2a2a2a;
+  --card-foreground: #e8e6e3;
+  --muted: rgba(255, 255, 255, 0.08);
+  --muted-foreground: #a8a5a0;
+  --border: #3d3c3a;
+  --border-subtle: #333230;
+  --primary: #7c9eff;
+  --primary-foreground: #1a1a1a;
+  --accent: rgba(255, 255, 255, 0.08);
+  --accent-foreground: #e8e6e3;
+  --whimsy-peach: #3a302c;
+  --whimsy-sky: #2a3140;
+  --whimsy-mint: #2a3532;
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  --shadow-float: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-accent: var(--accent);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --radius-lg: var(--radius);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "kern" 1, "liga" 1;
+  line-height: var(--line-height-normal);
+}
+
+.prose-width {
+  max-width: var(--content-width);
+}
+
+.prose-width-wide {
+  max-width: var(--content-width-wide);
+}
+
+/* Soft decorative blobs — gentle, almost childlike */
+.welcome-whimsy {
+  position: relative;
+}
+.welcome-whimsy::before {
+  content: "";
+  position: absolute;
+  right: -0.5rem;
+  top: -0.25rem;
+  width: 5.5rem;
+  height: 4rem;
+  pointer-events: none;
+  opacity: 0.55;
+  background:
+    radial-gradient(circle at 72% 28%, #ffd8cc 0%, transparent 42%),
+    radial-gradient(circle at 38% 58%, #cfe2ff 0%, transparent 38%),
+    radial-gradient(circle at 88% 72%, #c8f0e4 0%, transparent 35%);
+  filter: blur(0.5px);
+}
+html.dark .welcome-whimsy::before {
+  opacity: 0.35;
+  background:
+    radial-gradient(circle at 72% 28%, #6b4a42 0%, transparent 42%),
+    radial-gradient(circle at 38% 58%, #3d4a66 0%, transparent 38%),
+    radial-gradient(circle at 88% 72%, #3d5c52 0%, transparent 35%);
+}
+
+@keyframes gentle-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+.welcome-emoji {
+  display: inline-block;
+  margin-left: 0.35rem;
+  font-size: 1.1em;
+  animation: gentle-bob 3s ease-in-out infinite;
+}
+
+/* Neutral Notion-style controls (no solid blue fill) */
+.notion-save-btn {
+  display: inline-flex;
+  height: 2rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  padding: 0 0.75rem;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--foreground);
+  box-shadow: 0 1px 2px rgba(15, 15, 15, 0.05);
+  cursor: pointer;
+  transition:
+    background-color 0.12s ease,
+    box-shadow 0.12s ease;
+}
+.notion-save-btn:hover {
+  background: var(--muted);
+  box-shadow: 0 1px 3px rgba(15, 15, 15, 0.08);
+}
+html.dark .notion-save-btn {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.28);
+}
+html.dark .notion-save-btn:hover {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.notion-edit-btn {
+  display: inline-flex;
+  height: 2rem;
+  align-items: center;
+  border-radius: 4px;
+  padding: 0 0.5rem;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition:
+    background-color 0.12s ease,
+    color 0.12s ease;
+}
+.notion-edit-btn:hover {
+  background: var(--muted);
+  color: var(--foreground);
+}
+
+/* 周复盘正文：略接近 Notion 的灰阶与抗锯齿 */
+.weekly-review-display {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+  opacity: 0.5;
+}
