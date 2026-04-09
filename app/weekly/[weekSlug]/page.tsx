@@ -174,85 +174,89 @@ export default function WeeklyDetailPage() {
           )}
 
           <section className="mt-12 border-t border-[var(--border-subtle)] pt-8">
-            <h3 className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[var(--muted-foreground)]">
-              {locale === "zh" ? "本周阅读" : "This Week's Reading"}
-            </h3>
-            {weeklyHub.reading.length > 0 ? (
-              <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                {weeklyHub.reading.map((book) => (
-                  <article
-                    key={book.id}
-                    className="rounded-[var(--radius-sm)] border border-[var(--border-subtle)] bg-[var(--card)]/55 p-4"
-                  >
-                    <BookCover
-                      src={book.coverImage}
-                      title={book.title}
-                      author={book.author}
-                      toneClassName={book.coverTone}
-                      className="max-w-[10.5rem]"
-                    />
-                    <p className="mt-3 text-[11px] uppercase tracking-[0.08em] text-[var(--muted-foreground)]">
-                      {book.author}
-                    </p>
-                    <p className="mt-1 text-[14px] font-medium text-[var(--foreground)]">{book.title}</p>
-                    <p className="mt-1 text-[12px] text-[var(--muted-foreground)]">{book.tagline}</p>
-                    <Link
-                      href={`/reading#week-${selected.programWeek}`}
-                      className="mt-3 inline-flex text-[12px] font-medium text-[var(--primary)] underline-offset-4 hover:underline"
-                    >
-                      {locale === "zh" ? "在阅读中打开" : "Open in Reading"}
-                    </Link>
-                  </article>
-                ))}
+            <div className="grid grid-cols-1 items-start gap-10 sm:grid-cols-2 sm:gap-8">
+              <div>
+                <h3 className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[var(--muted-foreground)]">
+                  {locale === "zh" ? "本周阅读" : "This Week's Reading"}
+                </h3>
+                {weeklyHub.reading.length > 0 ? (
+                  <div className="mt-4 space-y-4">
+                    {weeklyHub.reading.map((book) => (
+                      <article
+                        key={book.id}
+                        className="rounded-[var(--radius-sm)] border border-[var(--border-subtle)] bg-[var(--card)]/55 p-4"
+                      >
+                        <BookCover
+                          src={book.coverImage}
+                          title={book.title}
+                          author={book.author}
+                          toneClassName={book.coverTone}
+                          className="max-w-[10.5rem]"
+                        />
+                        <p className="mt-3 text-[11px] uppercase tracking-[0.08em] text-[var(--muted-foreground)]">
+                          {book.author}
+                        </p>
+                        <p className="mt-1 text-[14px] font-medium text-[var(--foreground)]">{book.title}</p>
+                        <p className="mt-1 text-[12px] text-[var(--muted-foreground)]">{book.tagline}</p>
+                        <Link
+                          href={`/reading#week-${selected.programWeek}`}
+                          className="mt-3 inline-flex text-[12px] font-medium text-[var(--primary)] underline-offset-4 hover:underline"
+                        >
+                          {locale === "zh" ? "在阅读中打开" : "Open in Reading"}
+                        </Link>
+                      </article>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="mt-4 text-[13px] text-[var(--muted-foreground)]">
+                    {locale === "zh" ? "本周暂无关联书目。" : "No linked reading for this week yet."}
+                  </p>
+                )}
               </div>
-            ) : (
-              <p className="mt-4 text-[13px] text-[var(--muted-foreground)]">
-                {locale === "zh" ? "本周暂无关联书目。" : "No linked reading for this week yet."}
-              </p>
-            )}
-          </section>
 
-          <section className="mt-12 border-t border-[var(--border-subtle)] pt-8">
-            <h3 className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[var(--muted-foreground)]">
-              {locale === "zh" ? "本周观影" : "This Week's Watching"}
-            </h3>
-            {weeklyHub.watching.length > 0 ? (
-              <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                {weeklyHub.watching.map((film) => (
-                  <article
-                    key={film.id}
-                    className="rounded-[var(--radius-sm)] border border-[var(--border-subtle)] bg-[var(--card)]/55 p-4"
-                  >
-                    <BookCover
-                      src={film.coverImage}
-                      title={film.title}
-                      author={film.director}
-                      toneClassName={film.coverTone}
-                      className="max-w-[10.5rem]"
-                    />
-                    {film.director.trim() ? (
-                      <p className="mt-3 text-[11px] uppercase tracking-[0.08em] text-[var(--muted-foreground)]">
-                        {film.director}
-                      </p>
-                    ) : null}
-                    <p className="mt-1 text-[14px] font-medium text-[var(--foreground)]">{film.title}</p>
-                    <p className="mt-1 text-[12px] text-[var(--muted-foreground)]">
-                      {locale === "zh" ? film.taglineZh : film.tagline}
-                    </p>
-                    <Link
-                      href={`/watching#week-${selected.programWeek}`}
-                      className="mt-3 inline-flex text-[12px] font-medium text-[var(--primary)] underline-offset-4 hover:underline"
-                    >
-                      {locale === "zh" ? "在观影档案中打开" : "Open in Watching archive"}
-                    </Link>
-                  </article>
-                ))}
+              <div>
+                <h3 className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[var(--muted-foreground)]">
+                  {locale === "zh" ? "本周观影" : "This Week's Watching"}
+                </h3>
+                {weeklyHub.watching.length > 0 ? (
+                  <div className="mt-4 space-y-4">
+                    {weeklyHub.watching.map((film) => (
+                      <article
+                        key={film.id}
+                        className="rounded-[var(--radius-sm)] border border-[var(--border-subtle)] bg-[var(--card)]/55 p-4"
+                      >
+                        <BookCover
+                          src={film.coverImage}
+                          title={film.title}
+                          author={film.director}
+                          toneClassName={film.coverTone}
+                          className="max-w-[10.5rem]"
+                        />
+                        {film.director.trim() ? (
+                          <p className="mt-3 text-[11px] uppercase tracking-[0.08em] text-[var(--muted-foreground)]">
+                            {film.director}
+                          </p>
+                        ) : null}
+                        <p className="mt-1 text-[14px] font-medium text-[var(--foreground)]">{film.title}</p>
+                        <p className="mt-1 text-[12px] text-[var(--muted-foreground)]">
+                          {locale === "zh" ? film.taglineZh : film.tagline}
+                        </p>
+                        <Link
+                          href={`/watching#week-${selected.programWeek}`}
+                          className="mt-3 inline-flex text-[12px] font-medium text-[var(--primary)] underline-offset-4 hover:underline"
+                        >
+                          {locale === "zh" ? "在观影档案中打开" : "Open in Watching archive"}
+                        </Link>
+                      </article>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="mt-4 text-[13px] text-[var(--muted-foreground)]">
+                    {locale === "zh" ? "本周暂无关联影片。" : "No linked film for this week yet."}
+                  </p>
+                )}
               </div>
-            ) : (
-              <p className="mt-4 text-[13px] text-[var(--muted-foreground)]">
-                {locale === "zh" ? "本周暂无关联影片。" : "No linked film for this week yet."}
-              </p>
-            )}
+            </div>
           </section>
         </div>
       </div>
