@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
+import React, { createContext, useCallback, useContext, useState } from "react";
 
 const STORAGE_KEY = "nicos-focus-week";
 
@@ -21,11 +21,7 @@ interface Week52ContextValue {
 const Week52Context = createContext<Week52ContextValue | null>(null);
 
 export function Week52Provider({ children }: { children: React.ReactNode }) {
-  const [focusWeek, setFocusWeekState] = useState(1);
-
-  useEffect(() => {
-    setFocusWeekState(readStoredWeek());
-  }, []);
+  const [focusWeek, setFocusWeekState] = useState(() => readStoredWeek());
 
   const setFocusWeek = useCallback((week: number) => {
     const w = Math.min(52, Math.max(1, week));
