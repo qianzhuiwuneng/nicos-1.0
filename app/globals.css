@@ -1,25 +1,25 @@
 @import "tailwindcss";
 
-/* Reflective neutrals + editorial restraint */
+/* Minimal editorial neutrals + single accent */
 :root {
   color-scheme: light;
-  --foreground: #2f2a24;
-  --foreground-soft: rgba(47, 42, 36, 0.66);
-  --sidebar-bg: rgba(251, 249, 246, 0.88);
-  --background: #f6f3ee;
-  --card: rgba(255, 255, 255, 0.7);
-  --card-foreground: #37352f;
-  --muted: rgba(47, 42, 36, 0.06);
-  --muted-foreground: #746c63;
-  --border: rgba(71, 62, 52, 0.14);
-  --border-subtle: rgba(71, 62, 52, 0.08);
-  --primary: #5f6f9e;
+  --foreground: #1f1f1c;
+  --foreground-soft: rgba(31, 31, 28, 0.66);
+  --sidebar-bg: #f7f7f5;
+  --background: #f7f7f5;
+  --card: #f0efeb;
+  --card-foreground: #1f1f1c;
+  --muted: #f0efeb;
+  --muted-foreground: #72706b;
+  --border: #dddad4;
+  --border-subtle: #e7e4de;
+  --primary: #5f4b57;
   --primary-foreground: #ffffff;
-  --accent: rgba(47, 42, 36, 0.05);
-  --accent-foreground: #37352f;
-  --whimsy-peach: #fff4ef;
-  --whimsy-sky: #eef4ff;
-  --whimsy-mint: #eefaf6;
+  --accent: #e4dadf;
+  --accent-foreground: #5f4b57;
+  --whimsy-peach: #f0efeb;
+  --whimsy-sky: #ece9e3;
+  --whimsy-mint: #ece9e3;
   --shadow-card: 0 1px 1px rgba(20, 16, 12, 0.04), 0 0 0 1px rgba(20, 16, 12, 0.04);
   --shadow-float: 0 8px 24px rgba(20, 16, 12, 0.08);
   --radius: 0.625rem;
@@ -34,23 +34,23 @@
 
 html.dark {
   color-scheme: dark;
-  --foreground: #e6ded3;
-  --foreground-soft: rgba(230, 222, 211, 0.72);
-  --sidebar-bg: rgba(27, 25, 23, 0.86);
-  --background: #191715;
-  --card: rgba(35, 32, 29, 0.82);
-  --card-foreground: #e8e6e3;
-  --muted: rgba(255, 248, 235, 0.08);
-  --muted-foreground: #a69d93;
-  --border: rgba(230, 214, 191, 0.17);
-  --border-subtle: rgba(230, 214, 191, 0.1);
-  --primary: #8c9ac8;
+  --foreground: #ece9e3;
+  --foreground-soft: rgba(236, 233, 227, 0.72);
+  --sidebar-bg: #1d1d1b;
+  --background: #171715;
+  --card: #22211f;
+  --card-foreground: #ece9e3;
+  --muted: #22211f;
+  --muted-foreground: #a8a49f;
+  --border: #3a3935;
+  --border-subtle: #2f2e2b;
+  --primary: #b8a3b1;
   --primary-foreground: #1a1a1a;
-  --accent: rgba(255, 248, 235, 0.08);
-  --accent-foreground: #e8e6e3;
-  --whimsy-peach: #3a302c;
-  --whimsy-sky: #2a3140;
-  --whimsy-mint: #2a3532;
+  --accent: rgba(95, 75, 87, 0.42);
+  --accent-foreground: #f3edf1;
+  --whimsy-peach: #2a2927;
+  --whimsy-sky: #2a2927;
+  --whimsy-mint: #2a2927;
   --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.06);
   --shadow-float: 0 4px 16px rgba(0, 0, 0, 0.25);
 }
@@ -73,10 +73,7 @@ html.dark {
 }
 
 body {
-  background:
-    radial-gradient(circle at 12% 0%, rgba(169, 149, 126, 0.1), transparent 40%),
-    radial-gradient(circle at 88% 16%, rgba(151, 163, 182, 0.1), transparent 34%),
-    var(--background);
+  background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system, sans-serif;
   font-size: 15px;
@@ -88,25 +85,8 @@ body {
     color 200ms ease;
 }
 
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.26;
-  background-image:
-    linear-gradient(transparent 96%, rgba(73, 64, 55, 0.06) 100%),
-    linear-gradient(90deg, transparent 97%, rgba(73, 64, 55, 0.035) 100%);
-  background-size: 24px 24px, 24px 24px;
-  z-index: -1;
-}
-
-html.dark body::before {
-  opacity: 0.18;
-}
-
 ::selection {
-  background: rgba(97, 115, 161, 0.22);
+  background: rgba(95, 75, 87, 0.22);
   color: var(--foreground);
 }
 
@@ -130,19 +110,19 @@ html.dark body::before {
   width: 5.5rem;
   height: 4rem;
   pointer-events: none;
-  opacity: 0.55;
+  opacity: 0.3;
   background:
-    radial-gradient(circle at 72% 28%, #ffd8cc 0%, transparent 42%),
-    radial-gradient(circle at 38% 58%, #cfe2ff 0%, transparent 38%),
-    radial-gradient(circle at 88% 72%, #c8f0e4 0%, transparent 35%);
+    radial-gradient(circle at 72% 28%, #e4dadf 0%, transparent 42%),
+    radial-gradient(circle at 38% 58%, #ede9e2 0%, transparent 38%),
+    radial-gradient(circle at 88% 72%, #ece9e3 0%, transparent 35%);
   filter: blur(0.5px);
 }
 html.dark .welcome-whimsy::before {
-  opacity: 0.35;
+  opacity: 0.22;
   background:
-    radial-gradient(circle at 72% 28%, #6b4a42 0%, transparent 42%),
-    radial-gradient(circle at 38% 58%, #3d4a66 0%, transparent 38%),
-    radial-gradient(circle at 88% 72%, #3d5c52 0%, transparent 35%);
+    radial-gradient(circle at 72% 28%, #5f4b57 0%, transparent 42%),
+    radial-gradient(circle at 38% 58%, #33312f 0%, transparent 38%),
+    radial-gradient(circle at 88% 72%, #33312f 0%, transparent 35%);
 }
 
 @keyframes gentle-bob {
