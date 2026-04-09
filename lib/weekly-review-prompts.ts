@@ -37,5 +37,25 @@ export function getWeeklyReviewPrompts(programWeek: number, locale: Locale): Wee
       },
     ];
   }
+  if (programWeek === 4) {
+    if (locale === "zh") {
+      return [
+        { id: "w4-designer-brands", label: "鉴赏、理解一些国内设计师品牌" },
+        { id: "w4-annie-hall", label: "《安妮霍尔》电影观后感" },
+        { id: "w4-book-parents", label: "书籍《不被父母控制的人生》感受与触动" },
+      ];
+    }
+    return [
+      {
+        id: "w4-designer-brands",
+        label: "Appreciating and understanding some Chinese designer brands",
+      },
+      { id: "w4-annie-hall", label: "Film reflections — Annie Hall (《安妮霍尔》)" },
+      {
+        id: "w4-book-parents",
+        label: "Book: A Life Not Controlled by Parents (《不被父母控制的人生》) — feelings & what touched you",
+      },
+    ];
+  }
   return [];
 }
