@@ -21,7 +21,11 @@ export function WeeklyReviewDisplay({
         const raw = (values[p.id] ?? "").trim();
         const html = toDisplayHtml(raw);
         return (
-          <article key={p.id} className="w-full">
+          <article
+            key={p.id}
+            id={`weekly-prompt-${p.id}`}
+            className="w-full scroll-mt-[calc(4.25rem+0.75rem)]"
+          >
             <h3 className="weekly-review-display__prompt text-[15px] font-semibold leading-snug tracking-[-0.022em] text-[var(--foreground)] sm:text-[16px]">
               {p.label}
             </h3>

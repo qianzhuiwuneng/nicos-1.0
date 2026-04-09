@@ -13,6 +13,10 @@ export type WatchingJourneyFilm = {
   coverTone: string;
   week: number;
   month: number;
+  /** Weekly reflection prompt id (movie section) */
+  reflectionPromptId: string;
+  /** If the note lives under a different program week than `week` */
+  reflectionWeek?: number;
 };
 
 export const watchingJourneyFilms: WatchingJourneyFilm[] = [
@@ -28,6 +32,7 @@ export const watchingJourneyFilms: WatchingJourneyFilm[] = [
     coverTone: "bg-[#d8d5d0]",
     week: 1,
     month: 1,
+    reflectionPromptId: "w1-movie",
   },
   {
     id: "film-w2",
@@ -40,6 +45,7 @@ export const watchingJourneyFilms: WatchingJourneyFilm[] = [
     coverTone: "bg-[#dcd8d2]",
     week: 2,
     month: 1,
+    reflectionPromptId: "w2-spring",
   },
   {
     id: "film-w3",
@@ -52,6 +58,7 @@ export const watchingJourneyFilms: WatchingJourneyFilm[] = [
     coverTone: "bg-[#d4d6da]",
     week: 3,
     month: 1,
+    reflectionPromptId: "w3-film",
   },
   {
     id: "film-w4",
@@ -64,6 +71,7 @@ export const watchingJourneyFilms: WatchingJourneyFilm[] = [
     coverTone: "bg-[#ddd9d4]",
     week: 4,
     month: 1,
+    reflectionPromptId: "w4-annie-hall",
   },
   {
     id: "film-w5",
@@ -76,6 +84,7 @@ export const watchingJourneyFilms: WatchingJourneyFilm[] = [
     coverTone: "bg-[#d6d8dc]",
     week: 5,
     month: 2,
+    reflectionPromptId: "w5-film",
   },
   {
     id: "film-w6",
@@ -88,6 +97,7 @@ export const watchingJourneyFilms: WatchingJourneyFilm[] = [
     coverTone: "bg-[#d0d2d5]",
     week: 6,
     month: 2,
+    reflectionPromptId: "w6-film",
   },
 ];
 

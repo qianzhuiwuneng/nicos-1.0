@@ -243,7 +243,7 @@ export default function WeeklyDetailPage() {
                       href={`/watching#week-${selected.programWeek}`}
                       className="mt-3 inline-flex text-[12px] font-medium text-[var(--primary)] underline-offset-4 hover:underline"
                     >
-                      {locale === "zh" ? "在观影中打开" : "Open in Watching"}
+                      {locale === "zh" ? "在观影档案中打开" : "Open in Watching archive"}
                     </Link>
                   </article>
                 ))}

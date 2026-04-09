@@ -1,15 +1,29 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { BookCover } from "@/components/reading/BookCover";
 import { useLanguage } from "@/context/LanguageContext";
 import { getWatchingMonthSections, watchingJourneyFilms } from "@/lib/watching-journey";
+import { buildSyncedWatchingNotes, type SyncedWatchingNote } from "@/lib/watching-note-sync";
 
 export default function WatchingPage() {
   const { locale } = useLanguage();
   const monthSections = useMemo(() => getWatchingMonthSections(), []);
+  const [syncedNotes, setSyncedNotes] = useState<Record<string, SyncedWatchingNote>>({});
+
+  useEffect(() => {
+    let cancelled = false;
+    async function run() {
+      const next = await buildSyncedWatchingNotes(watchingJourneyFilms);
+      if (!cancelled) setSyncedNotes(next);
+    }
+    void run();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return (
     <AppLayout
@@ -84,21 +98,56 @@ export default function WatchingPage() {
                         {locale === "zh" ? `第 ${lot.week} 周` : `Week ${lot.week}`}
                       </p>
                       <div className="mt-3 border-t border-[var(--border-subtle)] pt-3">
-                        <p className="text-[11px] text-[var(--muted-foreground)]">
-                          {locale === "zh"
-                            ? "观影感受可写在当周周复盘里。"
-                            : "Note what stayed in that week’s reflection."}
-                        </p>
+                        {syncedNotes[lot.id] ? (
+                          <>
+                            <Link
+                              href={`/watching/${lot.id}`}
+                              className="text-[11px] text-[var(--muted-foreground)] underline-offset-4 hover:underline"
+                            >
+                              {syncedNotes[lot.id].sectionTitle}
+                            </Link>
+                            <Link
+                              href={`/watching/${lot.id}`}
+                              className="mt-1.5 block text-[12px] leading-relaxed text-[var(--foreground-soft)] underline-offset-4 hover:underline"
+                            >
+                              {syncedNotes[lot.id].excerpt}
+                            </Link>
+                          </>
+                        ) : (
+                          <>
+                            <p className="text-[11px] text-[var(--muted-foreground)]">
+                              {locale === "zh"
+                                ? "还没有匹配到周复盘里的观影条目。"
+                                : "No linked movie reflection section found yet."}
+                            </p>
+                            <p className="mt-1.5 text-[12px] leading-relaxed text-[var(--foreground-soft)]">
+                              {locale === "zh"
+                                ? "先在当周周复盘里保存「电影观后感」，随后会显示在这里。"
+                                : "Save the weekly film section first, then it will appear here."}
+                            </p>
+                          </>
+                        )}
                       </div>
                       <p className="mt-3 text-[12px] leading-relaxed text-[var(--foreground-soft)]">
                         {locale === "zh" ? lot.taglineZh : lot.tagline}
                       </p>
-                      <Link
-                        href={`/weekly/week-${lot.week}`}
-                        className="mt-4 inline-flex text-[12px] font-medium text-[var(--primary)] underline-offset-4 hover:underline"
-                      >
-                        {locale === "zh" ? "查看周复盘" : "View Week Reflection"}
-                      </Link>
+                      <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2">
+                        {syncedNotes[lot.id] ? (
+                          <Link
+                            href={`/watching/${lot.id}`}
+                            className="inline-flex text-[12px] font-medium text-[var(--primary)] underline-offset-4 hover:underline"
+                          >
+                            {locale === "zh" ? "查看完整笔记" : "Read Full Note"}
+                          </Link>
+                        ) : (
+                          <Link
+                            href={`/weekly/week-${lot.week}#weekly-prompt-${lot.reflectionPromptId}`}
+                            className="inline-flex text-[12px] font-medium text-[var(--primary)] underline-offset-4 hover:underline"
+                          >
+                            {locale === "zh" ? "去周复盘写观影" : "Write in week reflection"}
+                          </Link>
+                        )}
+                      </div>
                     </div>
                   </article>
                 ))}

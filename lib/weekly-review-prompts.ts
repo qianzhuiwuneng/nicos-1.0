@@ -37,6 +37,17 @@ export function getWeeklyReviewPrompts(programWeek: number, locale: Locale): Wee
       },
     ];
   }
+  if (programWeek === 3) {
+    if (locale === "zh") {
+      return [{ id: "w3-film", label: "《难以置信的事实》电影观后感" }];
+    }
+    return [
+      {
+        id: "w3-film",
+        label: "Film reflections — The Unbelievable Truth (《难以置信的事实》)",
+      },
+    ];
+  }
   if (programWeek === 4) {
     if (locale === "zh") {
       return [
@@ -54,6 +65,28 @@ export function getWeeklyReviewPrompts(programWeek: number, locale: Locale): Wee
       {
         id: "w4-book-parents",
         label: "Book: A Life Not Controlled by Parents (《不被父母控制的人生》) — feelings & what touched you",
+      },
+    ];
+  }
+  if (programWeek === 5) {
+    if (locale === "zh") {
+      return [{ id: "w5-film", label: "《飞行员的妻子》电影观后感" }];
+    }
+    return [
+      {
+        id: "w5-film",
+        label: "Film reflections — The Aviator's Wife (《飞行员的妻子》)",
+      },
+    ];
+  }
+  if (programWeek === 6) {
+    if (locale === "zh") {
+      return [{ id: "w6-film", label: "《情事》电影观后感" }];
+    }
+    return [
+      {
+        id: "w6-film",
+        label: "Film reflections — La riffa / The Raffle (《情事》)",
       },
     ];
   }

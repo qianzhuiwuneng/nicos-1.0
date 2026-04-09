@@ -169,7 +169,12 @@ export function WeeklyReviewEditor({
       ) : isEditing ? (
         <div className="space-y-6">
           {prompts.map((p) => (
-            <label key={p.id} className="block">
+            <div
+              key={p.id}
+              id={`weekly-prompt-${p.id}`}
+              className="scroll-mt-[calc(4.25rem+0.75rem)]"
+            >
+            <label className="block">
               <span className="text-[14px] font-medium leading-snug text-[var(--foreground)]">
                 {p.label}
               </span>
@@ -215,6 +220,7 @@ export function WeeklyReviewEditor({
                 />
               </div>
             </label>
+            </div>
           ))}
           <div className="pt-1">
             <button type="button" onClick={() => void handleSave()} className="notion-save-btn">

@@ -79,71 +79,75 @@ export default function ThisWeekPage() {
         </div>
 
         <div className="mt-12 border-t border-[var(--border-subtle)] pt-10">
-          <h2 className="text-[10px] font-semibold uppercase tracking-[0.13em] text-[var(--muted-foreground)]">
-            {locale === "zh" ? "本周阅读" : "This Week's Reading"}
-          </h2>
-          {thisWeekReading ? (
-            <article className="mt-4 rounded-[var(--radius-sm)] border border-[var(--border-subtle)] bg-[var(--card)]/55 p-4">
-              <BookCover
-                src={thisWeekReading.coverImage}
-                title={thisWeekReading.title}
-                author={thisWeekReading.author}
-                toneClassName={thisWeekReading.coverTone}
-                className="max-w-[11rem]"
-              />
-              <p className="mt-4 text-[12px] uppercase tracking-[0.08em] text-[var(--muted-foreground)]">
-                {thisWeekReading.author}
-              </p>
-              <p className="mt-1 text-[14px] font-medium text-[var(--foreground)]">{thisWeekReading.title}</p>
-              <p className="mt-1 text-[12px] text-[var(--muted-foreground)]">{thisWeekReading.tagline}</p>
-              <Link
-                href={`/reading#week-${currentWeek}`}
-                className="mt-4 inline-flex text-[12px] font-medium text-[var(--primary)] underline-offset-4 hover:underline"
-              >
-                {locale === "zh" ? "在阅读中打开" : "Open in Reading"}
-              </Link>
-            </article>
-          ) : (
-            <p className="mt-4 text-[14px] text-[var(--muted-foreground)]">
-              {locale === "zh" ? "本周暂无关联书目。" : "No linked reading for this week yet."}
-            </p>
-          )}
-        </div>
-
-        <div className="mt-12 border-t border-[var(--border-subtle)] pt-10">
-          <h2 className="text-[10px] font-semibold uppercase tracking-[0.13em] text-[var(--muted-foreground)]">
-            {locale === "zh" ? "本周观影" : "This Week's Watching"}
-          </h2>
-          {thisWeekWatching ? (
-            <article className="mt-4 rounded-[var(--radius-sm)] border border-[var(--border-subtle)] bg-[var(--card)]/55 p-4">
-              <BookCover
-                src={thisWeekWatching.coverImage}
-                title={thisWeekWatching.title}
-                author={thisWeekWatching.director}
-                toneClassName={thisWeekWatching.coverTone}
-                className="max-w-[11rem]"
-              />
-              {thisWeekWatching.director.trim() ? (
-                <p className="mt-4 text-[12px] uppercase tracking-[0.08em] text-[var(--muted-foreground)]">
-                  {thisWeekWatching.director}
+          <div className="grid grid-cols-1 items-start gap-10 sm:grid-cols-2 sm:gap-8">
+            <section>
+              <h2 className="text-[10px] font-semibold uppercase tracking-[0.13em] text-[var(--muted-foreground)]">
+                {locale === "zh" ? "本周阅读" : "This Week's Reading"}
+              </h2>
+              {thisWeekReading ? (
+                <article className="mt-4 rounded-[var(--radius-sm)] border border-[var(--border-subtle)] bg-[var(--card)]/55 p-4">
+                  <BookCover
+                    src={thisWeekReading.coverImage}
+                    title={thisWeekReading.title}
+                    author={thisWeekReading.author}
+                    toneClassName={thisWeekReading.coverTone}
+                    className="max-w-[11rem]"
+                  />
+                  <p className="mt-4 text-[12px] uppercase tracking-[0.08em] text-[var(--muted-foreground)]">
+                    {thisWeekReading.author}
+                  </p>
+                  <p className="mt-1 text-[14px] font-medium text-[var(--foreground)]">{thisWeekReading.title}</p>
+                  <p className="mt-1 text-[12px] text-[var(--muted-foreground)]">{thisWeekReading.tagline}</p>
+                  <Link
+                    href={`/reading#week-${currentWeek}`}
+                    className="mt-4 inline-flex text-[12px] font-medium text-[var(--primary)] underline-offset-4 hover:underline"
+                  >
+                    {locale === "zh" ? "在阅读中打开" : "Open in Reading"}
+                  </Link>
+                </article>
+              ) : (
+                <p className="mt-4 text-[14px] text-[var(--muted-foreground)]">
+                  {locale === "zh" ? "本周暂无关联书目。" : "No linked reading for this week yet."}
                 </p>
-              ) : null}
-              <p className="mt-1 text-[14px] font-medium text-[var(--foreground)]">{thisWeekWatching.title}</p>
-              <p className="mt-1 text-[12px] text-[var(--muted-foreground)]">
-                {locale === "zh" ? thisWeekWatching.taglineZh : thisWeekWatching.tagline}
-              </p>
-              <Link
-                href={`/watching#week-${currentWeek}`}
-                className="mt-4 inline-flex text-[12px] font-medium text-[var(--primary)] underline-offset-4 hover:underline"
-              >
-                {locale === "zh" ? "在观影中打开" : "Open in Watching"}
-              </Link>
-            </article>
-          ) : (
-            <p className="mt-4 text-[14px] text-[var(--muted-foreground)]">
-              {locale === "zh" ? "本周暂无关联影片。" : "No linked film for this week yet."}
-            </p>
-          )}
+              )}
+            </section>
+
+            <section>
+              <h2 className="text-[10px] font-semibold uppercase tracking-[0.13em] text-[var(--muted-foreground)]">
+                {locale === "zh" ? "本周观影" : "This Week's Watching"}
+              </h2>
+              {thisWeekWatching ? (
+                <article className="mt-4 rounded-[var(--radius-sm)] border border-[var(--border-subtle)] bg-[var(--card)]/55 p-4">
+                  <BookCover
+                    src={thisWeekWatching.coverImage}
+                    title={thisWeekWatching.title}
+                    author={thisWeekWatching.director}
+                    toneClassName={thisWeekWatching.coverTone}
+                    className="max-w-[11rem]"
+                  />
+                  {thisWeekWatching.director.trim() ? (
+                    <p className="mt-4 text-[12px] uppercase tracking-[0.08em] text-[var(--muted-foreground)]">
+                      {thisWeekWatching.director}
+                    </p>
+                  ) : null}
+                  <p className="mt-1 text-[14px] font-medium text-[var(--foreground)]">{thisWeekWatching.title}</p>
+                  <p className="mt-1 text-[12px] text-[var(--muted-foreground)]">
+                    {locale === "zh" ? thisWeekWatching.taglineZh : thisWeekWatching.tagline}
+                  </p>
+                  <Link
+                    href={`/watching#week-${currentWeek}`}
+                    className="mt-4 inline-flex text-[12px] font-medium text-[var(--primary)] underline-offset-4 hover:underline"
+                  >
+                    {locale === "zh" ? "在观影档案中打开" : "Open in Watching archive"}
+                  </Link>
+                </article>
+              ) : (
+                <p className="mt-4 text-[14px] text-[var(--muted-foreground)]">
+                  {locale === "zh" ? "本周暂无关联影片。" : "No linked film for this week yet."}
+                </p>
+              )}
+            </section>
+          </div>
         </div>
 
         <p className="mt-10 border-t border-[var(--border-subtle)] pt-8">
