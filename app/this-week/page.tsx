@@ -8,6 +8,7 @@ import { useWeek52Nav } from "@/context/Week52Context";
 import { getPhaseForWeek, getWeek52Entry } from "@/lib/week52-data";
 import { WeeklyReviewEditor } from "@/components/weekly/WeeklyReviewEditor";
 import { getCurrentProgramWeek } from "@/lib/program-week";
+import { getWeeklyHubContent } from "@/lib/reading-journey";
 
 export default function ThisWeekPage() {
   const { t, locale } = useLanguage();
@@ -15,6 +16,8 @@ export default function ThisWeekPage() {
   const currentWeek = getCurrentProgramWeek();
   const entry = getWeek52Entry(currentWeek);
   const phase = getPhaseForWeek(currentWeek);
+  const weeklyHub = getWeeklyHubContent(currentWeek);
+  const thisWeekReading = weeklyHub.reading[0];
   const weekLabel = locale === "zh" ? `第 ${currentWeek} 周` : `Week ${currentWeek}`;
 
   useEffect(() => {
@@ -71,6 +74,38 @@ export default function ThisWeekPage() {
               </li>
             ))}
           </ul>
+        </div>
+
+        <div className="mt-12 border-t border-[var(--border-subtle)] pt-10">
+          <h2 className="text-[10px] font-semibold uppercase tracking-[0.13em] text-[var(--muted-foreground)]">
+            This Week's Reading
+          </h2>
+          {thisWeekReading ? (
+            <article className="mt-4 rounded-[var(--radius-sm)] border border-[var(--border-subtle)] bg-[var(--card)]/55 p-4">
+              <div className={`aspect-[3/4] w-full max-w-[11rem] border border-[var(--border)] ${thisWeekReading.coverTone}`}>
+                <div className="flex h-full items-center justify-center px-4 text-center">
+                  <p className="text-[16px] font-medium leading-snug text-[var(--foreground)]">
+                    {thisWeekReading.title}
+                  </p>
+                </div>
+              </div>
+              <p className="mt-4 text-[12px] uppercase tracking-[0.08em] text-[var(--muted-foreground)]">
+                {thisWeekReading.author}
+              </p>
+              <p className="mt-1 text-[14px] font-medium text-[var(--foreground)]">{thisWeekReading.title}</p>
+              <p className="mt-1 text-[12px] text-[var(--muted-foreground)]">{thisWeekReading.tagline}</p>
+              <Link
+                href={`/reading#week-${currentWeek}`}
+                className="mt-4 inline-flex text-[12px] font-medium text-[var(--primary)] underline-offset-4 hover:underline"
+              >
+                Open in Reading
+              </Link>
+            </article>
+          ) : (
+            <p className="mt-4 text-[14px] text-[var(--muted-foreground)]">
+              No linked reading for this week yet.
+            </p>
+          )}
         </div>
 
         <p className="mt-10 border-t border-[var(--border-subtle)] pt-8">

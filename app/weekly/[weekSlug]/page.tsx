@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { WeeklyReviewDisplay } from "@/components/weekly/WeeklyReviewDisplay";
@@ -20,6 +21,7 @@ import {
   fetchWeeklyReviewCloud,
   mergeRemoteAndLocal,
 } from "@/lib/weekly-review-cloud";
+import { getWeeklyHubContent } from "@/lib/reading-journey";
 
 function parseWeekSlug(slug: string | undefined): number | null {
   if (!slug) return null;
@@ -70,6 +72,7 @@ export default function WeeklyDetailPage() {
     () => getWeeklyReviewPrompts(selected.programWeek, locale),
     [selected.programWeek, locale]
   );
+  const weeklyHub = useMemo(() => getWeeklyHubContent(selected.programWeek), [selected.programWeek]);
 
   useEffect(() => {
     let cancelled = false;
@@ -168,6 +171,43 @@ export default function WeeklyDetailPage() {
           ) : (
             <WeeklyReviewDisplay prompts={prompts} values={values} />
           )}
+
+          <section className="mt-12 border-t border-[var(--border-subtle)] pt-8">
+            <h3 className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[var(--muted-foreground)]">
+              This Week&apos;s Reading
+            </h3>
+            {weeklyHub.reading.length > 0 ? (
+              <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                {weeklyHub.reading.map((book) => (
+                  <article
+                    key={book.id}
+                    className="rounded-[var(--radius-sm)] border border-[var(--border-subtle)] bg-[var(--card)]/55 p-4"
+                  >
+                    <div className={`aspect-[3/4] w-full max-w-[10.5rem] border border-[var(--border)] ${book.coverTone}`}>
+                      <div className="flex h-full items-center justify-center px-3 text-center">
+                        <p className="text-[15px] font-medium leading-snug text-[var(--foreground)]">{book.title}</p>
+                      </div>
+                    </div>
+                    <p className="mt-3 text-[11px] uppercase tracking-[0.08em] text-[var(--muted-foreground)]">
+                      {book.author}
+                    </p>
+                    <p className="mt-1 text-[14px] font-medium text-[var(--foreground)]">{book.title}</p>
+                    <p className="mt-1 text-[12px] text-[var(--muted-foreground)]">{book.tagline}</p>
+                    <Link
+                      href={`/reading#week-${selected.programWeek}`}
+                      className="mt-3 inline-flex text-[12px] font-medium text-[var(--primary)] underline-offset-4 hover:underline"
+                    >
+                      Open in Reading
+                    </Link>
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <p className="mt-4 text-[13px] text-[var(--muted-foreground)]">
+                No linked reading for this week yet.
+              </p>
+            )}
+          </section>
         </div>
       </div>
     </AppLayout>

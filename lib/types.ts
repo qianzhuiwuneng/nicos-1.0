@@ -12,6 +12,8 @@ export interface LedgerEntry {
   id: string;
   title: string;
   date: string;
+  week?: number;
+  month?: number;
   category: LedgerCategory;
   amount: number;
   purpose: string;
@@ -37,6 +39,8 @@ export interface FeelingEntry {
   id: string;
   title: string;
   date: string;
+  week?: number;
+  month?: number;
   mood: Mood[];
   energy: 1 | 2 | 3 | 4 | 5;
   self_state: string;
@@ -54,6 +58,8 @@ export interface LookEntry {
   id: string;
   title: string;
   date: string;
+  week?: number;
+  month?: number;
   imageUrl: string;
   occasion: LookOccasion;
   styleTags: string[];
@@ -85,6 +91,8 @@ export interface TasteEntry {
   title: string;
   type: TasteType;
   date: string;
+  week?: number;
+  month?: number;
   coverUrl?: string;
   whyILikeIt: string;
   translateToLife: string;
@@ -139,6 +147,8 @@ export type ToTryType =
 export interface ToTryEntry {
   id: string;
   title: string;
+  week?: number;
+  month?: number;
   type: ToTryType;
   status: ToTryStatus;
   priority: "High" | "Medium" | "Low";
