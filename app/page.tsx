@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { useLanguage } from "@/context/LanguageContext";
 import { useWeek52Nav } from "@/context/Week52Context";
@@ -15,6 +15,8 @@ import {
   type SurfacedLine,
 } from "@/lib/surfaced-lines-storage";
 
+const useSafeLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
+
 export default function DashboardPage() {
   const { t, locale } = useLanguage();
   const { focusWeek } = useWeek52Nav();
@@ -22,11 +24,11 @@ export default function DashboardPage() {
   const [linePool, setLinePool] = useState<SurfacedLine[]>([]);
   const [activeLine, setActiveLine] = useState<SurfacedLine | null>(null);
 
-  useEffect(() => {
+  useSafeLayoutEffect(() => {
     setYearTheme(loadYearTheme());
   }, []);
 
-  useEffect(() => {
+  useSafeLayoutEffect(() => {
     const pool = loadSurfacedLinePool();
     setLinePool(pool);
     const lastId = getLastSurfacedLineId();
