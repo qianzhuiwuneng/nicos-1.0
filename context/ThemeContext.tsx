@@ -26,7 +26,7 @@ interface ThemeContextValue {
   theme: Theme;
   setTheme: (theme: Theme) => void;
   toggleTheme: () => void;
-  /** True after client read localStorage — avoids icon mismatch with html.dark from inline script */
+  /** True after client has read theme from localStorage (avoids icon flash). */
   ready: boolean;
 }
 
@@ -34,18 +34,18 @@ const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = useState<Theme>("light");
-  const [ready, setReady] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setThemeState(getStoredTheme());
-    setReady(true);
+    setMounted(true);
   }, []);
 
   useEffect(() => {
-    if (!ready) return;
+    if (!mounted) return;
     applyTheme(theme);
     localStorage.setItem(STORAGE_KEY, theme);
-  }, [ready, theme]);
+  }, [mounted, theme]);
 
   const setTheme = useCallback((next: Theme) => {
     setThemeState(next);
@@ -55,7 +55,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     setThemeState((prev) => (prev === "light" ? "dark" : "light"));
   }, []);
 
-  const value: ThemeContextValue = { theme, setTheme, toggleTheme, ready };
+  const value: ThemeContextValue = { theme, setTheme, toggleTheme, ready: mounted };
 
   return (
     <ThemeContext.Provider value={value}>

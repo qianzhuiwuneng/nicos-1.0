@@ -156,6 +156,19 @@ export const translations = {
         "No prompts for this week yet — they’ll be set once the prior week’s plan is shared.",
       pageNoPrompts:
         "No review prompts for this week yet. They are usually shared at the end of the previous week.",
+      cloudTitle: "Share online (cloud)",
+      cloudHint:
+        "Friends can read your weekly review on this site. Saving to the cloud requires the same edit key you set in Vercel (WEEKLY_WRITE_KEY). Only you should know it.",
+      cloudDisabledHint:
+        "To sync reviews online: add Supabase env vars on Vercel and set NEXT_PUBLIC_WEEKLY_REVIEW_CLOUD=true. See .env.example in the repo.",
+      cloudKeyPlaceholder: "Your edit key",
+      cloudKeySave: "Save key on this device",
+      cloudKeyOnDevice: "Edit key saved on this browser.",
+      cloudKeyForget: "Remove key",
+      cloudSaveNeedKey: "Cloud sync is on — add your edit key on the Weekly page first, then save again.",
+      cloudSaveBadKey: "Edit key does not match the server. Check Vercel WEEKLY_WRITE_KEY.",
+      cloudSaveFailed: "Could not save to cloud. Check Supabase and redeploy.",
+      footerCloudSetupLink: "Set your edit key on the Weekly page for cloud sync.",
     },
     monthly: {
       title: "Monthly",
@@ -362,6 +375,19 @@ export const translations = {
       footerEdit: "修改",
       footerNoPromptsThisWeek: "本周尚未配置复盘条目，请待上一周说明后再填写。",
       pageNoPrompts: "本周尚未配置复盘条目。一般在上一周结束时说明本周要写的内容。",
+      cloudTitle: "线上分享（云端）",
+      cloudHint:
+        "朋友打开同一网站即可阅读你的周复盘。保存到云端需输入你在 Vercel 里设置的编辑密钥（WEEKLY_WRITE_KEY），请勿告诉他人。",
+      cloudDisabledHint:
+        "若需云端同步：在 Vercel 配置 Supabase 环境变量，并设置 NEXT_PUBLIC_WEEKLY_REVIEW_CLOUD=true。详见仓库内 .env.example。",
+      cloudKeyPlaceholder: "输入编辑密钥",
+      cloudKeySave: "在本机保存密钥",
+      cloudKeyOnDevice: "已在本浏览器保存编辑密钥。",
+      cloudKeyForget: "清除密钥",
+      cloudSaveNeedKey: "已开启云端 — 请先在「周复盘」页输入并保存编辑密钥，再点保存。",
+      cloudSaveBadKey: "密钥与服务器不一致，请核对 Vercel 中的 WEEKLY_WRITE_KEY。",
+      cloudSaveFailed: "云端保存失败，请检查 Supabase 与部署配置。",
+      footerCloudSetupLink: "在「周复盘」页填写编辑密钥后可同步到云端。",
     },
     monthly: {
       title: "月总结",

@@ -23,16 +23,12 @@ export function AppLayout({
   return (
     <>
       <Sidebar />
-      <div className="min-h-screen border-l border-[var(--border-subtle)] bg-[var(--background)] pl-52">
+      <div className="min-h-screen pl-52">
         <Topbar title={title} description={description}>
           {topbarRight}
         </Topbar>
         <main
-          className={
-            narrow
-              ? "mx-auto max-w-[var(--content-width-wide)] px-8 py-10"
-              : "px-8 py-10"
-          }
+          className={narrow ? "mx-auto max-w-[var(--content-width-wide)] px-8 py-10" : "px-8 py-10"}
         >
           {children}
           <WeeklyReviewFooter />

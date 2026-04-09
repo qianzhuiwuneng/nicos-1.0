@@ -22,8 +22,8 @@ function dispatchWeeklyReviewSaved() {
   }
 }
 
-/** 仅在首页与 52 周方案页展示；账本/穿搭等模块不显示。 */
-const WEEKLY_FOOTER_PATHS = new Set<string>(["/", "/program"]);
+/** 仅在 52 周方案页展示（仪表盘与其他模块不显示复盘表单）。 */
+const WEEKLY_FOOTER_PATHS = new Set<string>(["/program"]);
 
 export function WeeklyReviewFooter() {
   const pathname = usePathname();

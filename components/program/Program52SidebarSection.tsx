@@ -157,19 +157,19 @@ export function Program52SidebarSection() {
       <div
         className={cn(
           "flex items-stretch gap-0.5 rounded-[var(--radius-sm)] transition-colors",
-          isProgramActive && !open && "bg-[var(--card)] shadow-[var(--shadow-card)]"
+          isProgramActive && !open && "bg-[var(--accent)]"
         )}
       >
         <Link
           href="/program"
           className={cn(
-            "flex min-w-0 flex-1 items-center gap-2 rounded-[var(--radius-sm)] px-2 py-1.5 text-[14px] transition-colors",
+            "flex min-w-0 flex-1 items-center gap-3 rounded-[var(--radius-sm)] px-3 py-2 text-[13px] transition-colors",
             isProgramActive
-              ? "font-medium text-[var(--foreground)]"
-              : "text-[var(--muted-foreground)] hover:bg-[var(--accent)] hover:text-[var(--foreground)]"
+              ? "font-medium text-[var(--accent-foreground)]"
+              : "text-[var(--muted-foreground)] hover:bg-[var(--muted)]/60 hover:text-[var(--foreground)]"
           )}
         >
-          <ListOrdered className="h-[17px] w-[17px] shrink-0 opacity-80" strokeWidth={1.75} />
+          <ListOrdered className="h-[18px] w-[18px] shrink-0 opacity-70" strokeWidth={1.5} />
           <span className="truncate">{t("nav.program52")}</span>
         </Link>
         <button
@@ -181,13 +181,13 @@ export function Program52SidebarSection() {
             setOpen(!open);
           }}
           className={cn(
-            "flex shrink-0 items-center justify-center rounded-[var(--radius-sm)] px-1.5 text-[var(--muted-foreground)] transition-colors hover:bg-[var(--accent)] hover:text-[var(--foreground)]",
+            "flex shrink-0 items-center justify-center rounded-[var(--radius-sm)] px-2 text-[var(--muted-foreground)] transition-colors hover:bg-[var(--muted)]/60 hover:text-[var(--foreground)]",
             open && "text-[var(--foreground)]"
           )}
         >
           <ChevronRight
             className={cn("h-4 w-4 transition-transform duration-200", open && "rotate-90")}
-            strokeWidth={1.75}
+            strokeWidth={1.5}
           />
         </button>
       </div>
