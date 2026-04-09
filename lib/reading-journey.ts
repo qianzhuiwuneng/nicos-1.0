@@ -9,6 +9,7 @@ export type ReadingJourneyBook = {
   coverTone: string;
   week: number;
   month: number;
+  reflectionWeek?: number;
   reflectionPromptId?: string;
 };
 
@@ -44,6 +45,8 @@ export const readingJourneyBooks: ReadingJourneyBook[] = [
     coverTone: "bg-[#d2d8dd]",
     week: 3,
     month: 1,
+    reflectionWeek: 4,
+    reflectionPromptId: "w4-book-parents",
   },
   {
     id: "lot-4",

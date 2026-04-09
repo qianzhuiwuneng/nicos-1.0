@@ -44,7 +44,9 @@ export default function ReadingPage() {
     let cancelled = false;
 
     async function run() {
-      const weeks = Array.from(new Set(readingJourneyBooks.map((book) => book.week)));
+      const weeks = Array.from(
+        new Set(readingJourneyBooks.map((book) => book.reflectionWeek ?? book.week))
+      );
       const weekValues = new Map<number, WeeklyReviewValues>();
       const weekPrompts = new Map<number, WeeklyReviewPrompt[]>();
 
@@ -60,8 +62,9 @@ export default function ReadingPage() {
 
       const next: Record<string, SyncedReadingNote> = {};
       for (const book of readingJourneyBooks) {
-        const prompts = weekPrompts.get(book.week) ?? [];
-        const values = weekValues.get(book.week) ?? {};
+        const sourceWeek = book.reflectionWeek ?? book.week;
+        const prompts = weekPrompts.get(sourceWeek) ?? [];
+        const values = weekValues.get(sourceWeek) ?? {};
         const prompt = pickPromptForBook(book, prompts);
         if (!prompt) continue;
         const text = (values[prompt.id] ?? "").trim();
