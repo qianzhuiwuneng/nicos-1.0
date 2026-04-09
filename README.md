@@ -1,4 +1,4 @@
-# Nicos 1.0
+# NicOS 1.0
 
 A quiet, reflective container for a year-long becoming journey. Not a productivity app — a place to revisit weekly reflections, monthly patterns, reading notes, and what is surfacing now.
 

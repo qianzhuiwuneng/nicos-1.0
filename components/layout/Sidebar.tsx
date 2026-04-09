@@ -84,7 +84,7 @@ export function Sidebar() {
           href="/"
           className="text-[15px] font-medium tracking-[0.01em] text-[var(--foreground)]/92"
         >
-          Nicos
+          NicOS
         </Link>
         <div className="flex items-center gap-0.5">
           <ThemeToggle />

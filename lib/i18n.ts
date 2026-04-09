@@ -38,7 +38,7 @@ export const translations = {
       title: "Now",
       description: "A quiet place to see where you are in the year.",
       opener:
-        "Nicos holds a year of practice — not tasks to clear, but threads to notice. Return here when you want to revisit what is becoming clearer.",
+        "NicOS holds a year of practice — not tasks to clear, but threads to notice. Return here when you want to revisit what is becoming clearer.",
       yearThemeLine: "Year theme",
       yearThemeUnset: "Let this stay here for now: one sentence for what this year is asking of you.",
       thisWeekLabel: "This week",
@@ -99,7 +99,7 @@ export const translations = {
     dashboard: {
       title: "Dashboard",
       description: "Your personal operating system at a glance.",
-      brand: "Nicos",
+      brand: "NicOS",
       subtitle: "A personal operating system for beauty, taste, feelings, and becoming.",
       welcome: "Welcome back. Today is a good day to notice what works, what doesn’t, and what you’re slowly becoming.",
       quickActions: "Quick actions",
@@ -136,7 +136,7 @@ export const translations = {
       coreGoal: "Core focus",
       thisWeekTasks: "This week — key actions",
       disclaimer:
-        "Summarised from your Nicole 52-week plan for quick reference in Nicos. Offline sessions and costs follow your agreement with your coach.",
+        "Summarised from your Nicole 52-week plan for quick reference in NicOS. Offline sessions and costs follow your agreement with your coach.",
       railLabel: "Fifty-two week program navigation",
       railTitle: "Year program",
       railHint: "Tap any week to see focus & tasks.",
@@ -284,7 +284,7 @@ export const translations = {
       title: "此刻",
       description: "看清自己处在这一年的哪一段。",
       opener:
-        "Nicos 承载一年的修习——不是要清掉的任务，而是可以被留意、被回看的线。需要方向感时回到这里。",
+        "NicOS 承载一年的修习——不是要清掉的任务，而是可以被留意、被回看的线。需要方向感时回到这里。",
       yearThemeLine: "年度主题",
       yearThemeUnset: "先让它停在这里：用一句话写下这一年正在向你显现什么。",
       thisWeekLabel: "本周",
@@ -345,7 +345,7 @@ export const translations = {
     dashboard: {
       title: "仪表盘",
       description: "你的个人操作系统一览。",
-      brand: "Nicos",
+      brand: "NicOS",
       subtitle: "围绕美、品味、感受与成为的个人操作系统。",
       welcome: "欢迎回来。今天适合留意什么有效、什么无效，以及你正在慢慢成为的样子。",
       quickActions: "快捷操作",
@@ -381,7 +381,7 @@ export const translations = {
       coreGoal: "核心目标",
       thisWeekTasks: "本周要点",
       disclaimer:
-        "内容根据 Nicole 52 周定制方案整理，便于在 Nicos 中查阅；线下课程与费用以你与导师的约定为准。",
+        "内容根据 Nicole 52 周定制方案整理，便于在 NicOS 中查阅；线下课程与费用以你与导师的约定为准。",
       railLabel: "五十二周方案导航",
       railTitle: "全年方案",
       railHint: "点选任一周查看目标与任务。",

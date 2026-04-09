@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Nicos — A Year in Practice",
+  title: "NicOS — A Year in Practice",
   description: "A quiet, reflective container for your year-long becoming journey.",
 };
 
