@@ -8,6 +8,7 @@ import { BookCover } from "@/components/reading/BookCover";
 import { useLanguage } from "@/context/LanguageContext";
 import { getReadingBookById, readingJourneyBooks } from "@/lib/reading-journey";
 import { buildSyncedReadingNotes, type SyncedReadingNote } from "@/lib/reading-note-sync";
+import { toDisplayHtml } from "@/lib/weekly-richtext";
 
 export default function ReadingBookDetailPage() {
   const { locale } = useLanguage();
@@ -87,12 +88,17 @@ export default function ReadingBookDetailPage() {
           <h2 className="mt-3 text-[16px] font-medium leading-snug text-[var(--foreground)]">
             {note?.sectionTitle ?? `${book.title} 感受与触动`}
           </h2>
-          <div className="mt-4 whitespace-pre-wrap text-[14px] leading-[1.85] text-[var(--foreground)]/92">
-            {note?.fullText ??
-              (locale === "zh"
-                ? "尚未同步到阅读笔记。请先在对应周复盘条目里填写并保存。"
-                : "No synced reading note yet. Fill and save the corresponding weekly reflection section first.")}
-          </div>
+          <div
+            className="prose prose-sm mt-4 max-w-none text-[14px] leading-[1.85] text-[var(--foreground)]/92"
+            dangerouslySetInnerHTML={{
+              __html: toDisplayHtml(
+                note?.fullText ??
+                  (locale === "zh"
+                    ? "尚未同步到阅读笔记。请先在对应周复盘条目里填写并保存。"
+                    : "No synced reading note yet. Fill and save the corresponding weekly reflection section first.")
+              ),
+            }}
+          />
           <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2">
             <Link
               href={`/weekly/week-${sourceWeek}`}

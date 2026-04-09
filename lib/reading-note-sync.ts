@@ -2,6 +2,7 @@ import { getWeeklyReviewPrompts, type WeeklyReviewPrompt } from "@/lib/weekly-re
 import { fetchWeeklyReviewCloud, mergeRemoteAndLocal } from "@/lib/weekly-review-cloud";
 import { loadWeeklyReviewValues, type WeeklyReviewValues } from "@/lib/weekly-review-storage";
 import type { ReadingJourneyBook } from "@/lib/reading-journey";
+import { toPlainText } from "@/lib/weekly-richtext";
 
 export type SyncedReadingNote = {
   sectionTitle: string;
@@ -15,7 +16,7 @@ function normalizeLabel(source: string): string {
 }
 
 function extractExcerpt(text: string, maxChars = 120): string {
-  const compact = text.replace(/\s+/g, " ").trim();
+  const compact = toPlainText(text);
   if (compact.length <= maxChars) return compact;
   return `${compact.slice(0, maxChars).trimEnd()}…`;
 }

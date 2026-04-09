@@ -70,3 +70,25 @@ export function extractBoldSentences(value: string): string[] {
 export function hasSurfaceableBoldSentence(value: string): boolean {
   return extractBoldSentences(value).length > 0;
 }
+
+export function toPlainText(value: string): string {
+  const raw = (value ?? "").trim();
+  if (!raw) return "";
+
+  if (isProbablyHtml(raw)) {
+    if (typeof window !== "undefined") {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(raw, "text/html");
+      return (doc.body.textContent ?? "").replace(/\s+/g, " ").trim();
+    }
+    return raw.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+  }
+
+  // strip lightweight markdown markers for card excerpts
+  return raw
+    .replace(/\*\*(.*?)\*\*/g, "$1")
+    .replace(/__(.*?)__/g, "$1")
+    .replace(/`([^`]+)`/g, "$1")
+    .replace(/\s+/g, " ")
+    .trim();
+}
