@@ -6,6 +6,7 @@ export type ReadingJourneyBook = {
   title: string;
   publisherYear: string;
   tagline: string;
+  coverImage: string;
   coverTone: string;
   week: number;
   month: number;
@@ -20,6 +21,7 @@ export const readingJourneyBooks: ReadingJourneyBook[] = [
     title: "突围原生家庭",
     publisherYear: "北京联合出版公司 · 2019",
     tagline: "How to rebuild the self after early wounds",
+    coverImage: "/books/tuwei-yuanshengjiating.png",
     coverTone: "bg-[#d7d4cf]",
     week: 1,
     month: 1,
@@ -31,6 +33,7 @@ export const readingJourneyBooks: ReadingJourneyBook[] = [
     title: "拥抱你的内在小孩",
     publisherYear: "漓江出版社 · 2011",
     tagline: "Inner child / fear / repair through love",
+    coverImage: "/books/inner-child.jpg",
     coverTone: "bg-[#dcd9d3]",
     week: 2,
     month: 1,
@@ -42,6 +45,7 @@ export const readingJourneyBooks: ReadingJourneyBook[] = [
     title: "不被父母控制的人生",
     publisherYear: "机械工业出版社 · 2021",
     tagline: "Boundaries / emotional independence / family detachment",
+    coverImage: "/books/not-controlled-by-parents.png",
     coverTone: "bg-[#d2d8dd]",
     week: 3,
     month: 1,
@@ -54,6 +58,7 @@ export const readingJourneyBooks: ReadingJourneyBook[] = [
     title: "被讨厌的勇气",
     publisherYear: "机械工业出版社 · 2021",
     tagline: "Adler / freedom / separation of tasks",
+    coverImage: "/books/the-courage-to-be-disliked.png",
     coverTone: "bg-[#d9d5dc]",
     week: 5,
     month: 2,
@@ -64,6 +69,7 @@ export const readingJourneyBooks: ReadingJourneyBook[] = [
     title: "自卑与超越",
     publisherYear: "江苏凤凰文艺出版社 · 2017",
     tagline: "Inferiority / meaning / becoming through effort",
+    coverImage: "/books/inferiority-and-beyond.png",
     coverTone: "bg-[#d7d7d2]",
     week: 6,
     month: 2,

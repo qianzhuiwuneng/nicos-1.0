@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { AppLayout } from "@/components/layout/AppLayout";
+import { BookCover } from "@/components/reading/BookCover";
 import { getReadingBookById, readingJourneyBooks } from "@/lib/reading-journey";
 import { buildSyncedReadingNotes, type SyncedReadingNote } from "@/lib/reading-note-sync";
 
@@ -47,18 +48,14 @@ export default function ReadingBookDetailPage() {
     <AppLayout title={book.title} description="Full reading note" narrow>
       <div className="mx-auto max-w-[42rem] pb-16 pt-2">
         <article className="rounded-[var(--radius-sm)] border border-[var(--border-subtle)] bg-[var(--background)] p-5 sm:p-6">
-          <div className={`relative aspect-[3/4] w-full max-w-[14rem] border border-[var(--border)] ${book.coverTone}`}>
-            <div className="absolute inset-x-0 top-0 border-b border-[var(--border)] px-3 py-2">
-              <p className="text-[9px] uppercase tracking-[0.12em] text-[var(--muted-foreground)]">
-                Week {book.week}
-              </p>
-            </div>
-            <div className="flex h-full items-center justify-center px-5 text-center">
-              <h1 className="text-[20px] font-medium tracking-[-0.01em] text-[var(--foreground)]">
-                {book.title}
-              </h1>
-            </div>
-          </div>
+          <BookCover
+            src={book.coverImage}
+            title={book.title}
+            author={book.author}
+            toneClassName={book.coverTone}
+            className="max-w-[14rem]"
+            lotLabel={`Week ${book.week}`}
+          />
 
           <div className="mt-6 border-t border-[var(--border-subtle)] pt-5">
             <p className="text-[11px] uppercase tracking-[0.08em] text-[var(--muted-foreground)]">{book.author}</p>
