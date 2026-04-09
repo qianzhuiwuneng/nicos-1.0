@@ -17,6 +17,14 @@ type SyncedReadingNote = {
   excerpt: string;
 };
 
+function mergeWeeklyValues(remote: WeeklyReviewValues, local: WeeklyReviewValues): WeeklyReviewValues {
+  const out: WeeklyReviewValues = { ...local };
+  for (const [k, v] of Object.entries(remote)) {
+    if (typeof v === "string" && v.trim().length > 0) out[k] = v;
+  }
+  return out;
+}
+
 function normalizeLabel(source: string): string {
   return source.replace(/[《》\s"'“”‘’:：—\-]/g, "").toLowerCase();
 }
@@ -53,11 +61,13 @@ export default function ReadingPage() {
       for (const week of weeks) {
         const prompts = getWeeklyReviewPrompts(week, "zh");
         weekPrompts.set(week, prompts);
-        if (prompts.length === 0) continue;
-        const promptIds = prompts.map((p) => p.id);
         const local = loadWeeklyReviewValues(week);
         const remote = await fetchWeeklyReviewCloud(week);
-        weekValues.set(week, mergeRemoteAndLocal(remote, local, promptIds));
+        const promptIds = prompts.map((p) => p.id);
+        // Keep known prompts merged the old way, then layer full remote/local keys
+        // so reflectionPromptId entries are still readable even if prompt config changes.
+        const promptMerged = prompts.length > 0 ? mergeRemoteAndLocal(remote, local, promptIds) : {};
+        weekValues.set(week, { ...mergeWeeklyValues(remote, local), ...promptMerged });
       }
 
       const next: Record<string, SyncedReadingNote> = {};
@@ -66,11 +76,12 @@ export default function ReadingPage() {
         const prompts = weekPrompts.get(sourceWeek) ?? [];
         const values = weekValues.get(sourceWeek) ?? {};
         const prompt = pickPromptForBook(book, prompts);
-        if (!prompt) continue;
-        const text = (values[prompt.id] ?? "").trim();
+        const promptId = prompt?.id ?? book.reflectionPromptId;
+        if (!promptId) continue;
+        const text = (values[promptId] ?? "").trim();
         if (!text) continue;
         next[book.id] = {
-          sectionTitle: prompt.label,
+          sectionTitle: prompt?.label ?? `${book.title} 感受与触动`,
           excerpt: extractExcerpt(text),
         };
       }
