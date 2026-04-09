@@ -9,6 +9,7 @@ export type ReadingJourneyBook = {
   coverTone: string;
   week: number;
   month: number;
+  reflectionPromptId?: string;
 };
 
 export const readingJourneyBooks: ReadingJourneyBook[] = [
@@ -21,6 +22,7 @@ export const readingJourneyBooks: ReadingJourneyBook[] = [
     coverTone: "bg-[#d7d4cf]",
     week: 1,
     month: 1,
+    reflectionPromptId: "w1-book",
   },
   {
     id: "lot-2",
@@ -31,6 +33,7 @@ export const readingJourneyBooks: ReadingJourneyBook[] = [
     coverTone: "bg-[#dcd9d3]",
     week: 2,
     month: 1,
+    reflectionPromptId: "w2-inner-child",
   },
   {
     id: "lot-3",
@@ -66,6 +69,30 @@ export const readingJourneyBooks: ReadingJourneyBook[] = [
 
 export function getReadingForWeek(week: number): ReadingJourneyBook[] {
   return readingJourneyBooks.filter((book) => book.week === week);
+}
+
+export function getReadingMonthSections() {
+  const grouped = readingJourneyBooks.reduce<Record<number, ReadingJourneyBook[]>>((acc, lot) => {
+    if (!acc[lot.month]) acc[lot.month] = [];
+    acc[lot.month].push(lot);
+    return acc;
+  }, {});
+
+  return Object.keys(grouped)
+    .map((month) => Number(month))
+    .sort((a, b) => a - b)
+    .map((month) => {
+      const lots = grouped[month].slice().sort((a, b) => a.week - b.week);
+      const weekList = lots.map((book) => book.week);
+      const firstWeek = weekList[0];
+      const lastWeek = weekList[weekList.length - 1];
+      return {
+        month,
+        lots,
+        firstWeek,
+        lastWeek,
+      };
+    });
 }
 
 export function getReadingWeekSections() {

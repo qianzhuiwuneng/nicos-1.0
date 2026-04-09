@@ -1,11 +1,85 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useMemo, useState } from "react";
 import { AppLayout } from "@/components/layout/AppLayout";
-import { getReadingWeekSections, readingJourneyBooks } from "@/lib/reading-journey";
+import {
+  getReadingMonthSections,
+  readingJourneyBooks,
+  type ReadingJourneyBook,
+} from "@/lib/reading-journey";
+import { getWeeklyReviewPrompts, type WeeklyReviewPrompt } from "@/lib/weekly-review-prompts";
+import { fetchWeeklyReviewCloud, mergeRemoteAndLocal } from "@/lib/weekly-review-cloud";
+import { loadWeeklyReviewValues, type WeeklyReviewValues } from "@/lib/weekly-review-storage";
+
+type SyncedReadingNote = {
+  sectionTitle: string;
+  excerpt: string;
+};
+
+function normalizeLabel(source: string): string {
+  return source.replace(/[《》\s"'“”‘’:：—\-]/g, "").toLowerCase();
+}
+
+function extractExcerpt(text: string, maxChars = 120): string {
+  const compact = text.replace(/\s+/g, " ").trim();
+  if (compact.length <= maxChars) return compact;
+  return `${compact.slice(0, maxChars).trimEnd()}…`;
+}
+
+function pickPromptForBook(book: ReadingJourneyBook, prompts: WeeklyReviewPrompt[]): WeeklyReviewPrompt | undefined {
+  if (book.reflectionPromptId) {
+    const exact = prompts.find((p) => p.id === book.reflectionPromptId);
+    if (exact) return exact;
+  }
+  const normalizedTitle = normalizeLabel(book.title);
+  return prompts.find((p) => normalizeLabel(p.label).includes(normalizedTitle));
+}
 
 export default function ReadingPage() {
-  const weeklySections = getReadingWeekSections();
+  const monthSections = useMemo(() => getReadingMonthSections(), []);
+  const [syncedNotes, setSyncedNotes] = useState<Record<string, SyncedReadingNote>>({});
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function run() {
+      const weeks = Array.from(new Set(readingJourneyBooks.map((book) => book.week)));
+      const weekValues = new Map<number, WeeklyReviewValues>();
+      const weekPrompts = new Map<number, WeeklyReviewPrompt[]>();
+
+      for (const week of weeks) {
+        const prompts = getWeeklyReviewPrompts(week, "zh");
+        weekPrompts.set(week, prompts);
+        if (prompts.length === 0) continue;
+        const promptIds = prompts.map((p) => p.id);
+        const local = loadWeeklyReviewValues(week);
+        const remote = await fetchWeeklyReviewCloud(week);
+        weekValues.set(week, mergeRemoteAndLocal(remote, local, promptIds));
+      }
+
+      const next: Record<string, SyncedReadingNote> = {};
+      for (const book of readingJourneyBooks) {
+        const prompts = weekPrompts.get(book.week) ?? [];
+        const values = weekValues.get(book.week) ?? {};
+        const prompt = pickPromptForBook(book, prompts);
+        if (!prompt) continue;
+        const text = (values[prompt.id] ?? "").trim();
+        if (!text) continue;
+        next[book.id] = {
+          sectionTitle: prompt.label,
+          excerpt: extractExcerpt(text),
+        };
+      }
+
+      if (!cancelled) setSyncedNotes(next);
+    }
+
+    void run();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return (
     <AppLayout
@@ -26,26 +100,26 @@ export default function ReadingPage() {
         </div>
 
         <div className="space-y-10">
-          {weeklySections.map((section) => (
+          {monthSections.map((section) => (
             <section
-              key={`week-${section.week}`}
-              id={`week-${section.week}`}
+              key={`month-${section.month}`}
               className="border-t border-[var(--border-subtle)] pt-7 first:border-t-0 first:pt-0"
             >
               <header className="mb-5">
                 <p className="text-[11px] font-medium uppercase tracking-[0.12em] text-[var(--muted-foreground)]">
-                  Month {section.month} · Week {section.week}
+                  Month {section.month}
                 </p>
                 <p className="mt-1 text-[12px] text-[var(--muted-foreground)]">
-                  {section.weekStart} - {section.weekEnd}
+                  Weeks {section.firstWeek}-{section.lastWeek}
                 </p>
               </header>
 
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-12">
+              <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
                 {section.lots.map((lot) => (
                   <article
                     key={lot.id}
-                    className="rounded-[var(--radius-sm)] border border-[var(--border-subtle)] bg-[var(--background)] p-4 sm:p-5 lg:col-span-5"
+                    id={`week-${lot.week}`}
+                    className="rounded-[var(--radius-sm)] border border-[var(--border-subtle)] bg-[var(--background)] p-4 sm:p-5"
                   >
                     <div className={`relative aspect-[3/4] w-full border border-[var(--border)] ${lot.coverTone}`}>
                       <div className="absolute inset-x-0 top-0 border-b border-[var(--border)] px-3 py-2">
@@ -68,6 +142,17 @@ export default function ReadingPage() {
                         {lot.title}
                       </p>
                       <p className="mt-1.5 text-[12px] text-[var(--muted-foreground)]">{lot.publisherYear}</p>
+                      <p className="mt-2 inline-flex rounded-[var(--radius-pill)] border border-[var(--border)] px-2 py-0.5 text-[10px] uppercase tracking-[0.08em] text-[var(--muted-foreground)]">
+                        Week {lot.week}
+                      </p>
+                      <div className="mt-3 border-t border-[var(--border-subtle)] pt-3">
+                        <p className="text-[11px] text-[var(--muted-foreground)]">
+                          {syncedNotes[lot.id]?.sectionTitle ?? "No linked reading-notes section found yet."}
+                        </p>
+                        <p className="mt-1.5 text-[12px] leading-relaxed text-[var(--foreground-soft)]">
+                          {syncedNotes[lot.id]?.excerpt ?? "Save your weekly reading note, then it will appear here automatically."}
+                        </p>
+                      </div>
                       <p className="mt-3 text-[12px] leading-relaxed text-[var(--foreground-soft)]">
                         {lot.tagline}
                       </p>
@@ -80,7 +165,6 @@ export default function ReadingPage() {
                     </div>
                   </article>
                 ))}
-                {section.lots.length === 1 && <div className="hidden lg:block lg:col-span-7" aria-hidden="true" />}
               </div>
             </section>
           ))}
