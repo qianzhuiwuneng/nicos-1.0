@@ -34,7 +34,7 @@ type NavIcon = ComponentType<{ className?: string; strokeWidth?: number }>;
 function NavGroup({ label, children }: { label: string; children: ReactNode }) {
   return (
     <div className="mt-5 first:mt-0">
-      <p className="mb-1.5 px-3 text-[9px] font-semibold uppercase tracking-[0.14em] text-[var(--muted-foreground)]">
+      <p className="mb-2 px-3 text-[9px] font-semibold uppercase tracking-[0.16em] text-[var(--muted-foreground)]/85">
         {label}
       </p>
       <div className="space-y-0.5">{children}</div>
@@ -66,7 +66,7 @@ function NavLink({
       className={cn(
         "flex items-center gap-3 rounded-[var(--radius-sm)] px-3 py-2 text-[13px] transition-colors",
         isActive
-          ? "bg-[var(--accent)] font-medium text-[var(--accent-foreground)]"
+          ? "bg-[var(--accent)] font-medium text-[var(--accent-foreground)] shadow-[inset_0_0_0_1px_var(--border-subtle)]"
           : "text-[var(--muted-foreground)] hover:bg-[var(--muted)]/50 hover:text-[var(--foreground)]"
       )}
     >
@@ -81,11 +81,11 @@ export function Sidebar() {
   const { t } = useLanguage();
 
   return (
-    <aside className="fixed left-0 top-0 z-40 flex h-screen w-60 flex-col border-r border-[var(--border-subtle)] bg-[var(--sidebar-bg)]/95 backdrop-blur-md">
-      <div className="flex h-[3.75rem] shrink-0 items-center justify-between gap-2 px-4">
+    <aside className="fixed left-0 top-0 z-40 flex h-screen w-60 flex-col border-r border-[var(--border-subtle)] bg-[var(--sidebar-bg)] backdrop-blur-md">
+      <div className="flex h-[4.25rem] shrink-0 items-center justify-between gap-2 px-4">
         <Link
           href="/"
-          className="text-[15px] font-medium tracking-[-0.02em] text-[var(--foreground)]"
+          className="text-[15px] font-medium tracking-[0.01em] text-[var(--foreground)]/92"
         >
           Nicos
         </Link>
@@ -94,7 +94,7 @@ export function Sidebar() {
           <LanguageSwitcher />
         </div>
       </div>
-      <nav className="min-h-0 flex-1 overflow-y-auto px-2 pb-8 pt-1">
+      <nav className="min-h-0 flex-1 overflow-y-auto px-2.5 pb-10 pt-2">
         <NavGroup label={t("nav.layerDirection")}>
           <NavLink href="/" label={t("nav.home")} icon={CircleDot} pathname={pathname} />
           <NavLink href="/identity" label={t("nav.identity")} icon={User} pathname={pathname} />

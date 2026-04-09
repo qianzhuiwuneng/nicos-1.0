@@ -1,29 +1,27 @@
 @import "tailwindcss";
 
-/* Notion-like neutrals + soft playful accents */
+/* Reflective neutrals + editorial restraint */
 :root {
   color-scheme: light;
-  --foreground: #37352f;
-  --foreground-soft: rgba(55, 53, 47, 0.65);
-  --sidebar-bg: #ffffff;
-  --background: #ffffff;
-  --card: #ffffff;
+  --foreground: #2f2a24;
+  --foreground-soft: rgba(47, 42, 36, 0.66);
+  --sidebar-bg: rgba(251, 249, 246, 0.88);
+  --background: #f6f3ee;
+  --card: rgba(255, 255, 255, 0.7);
   --card-foreground: #37352f;
-  --muted: rgba(55, 53, 47, 0.08);
-  --muted-foreground: #6f6f6f;
-  --border: #e5e5e5;
-  --border-subtle: #f0f0f0;
-  /* Friendly blue — links & focus, a little brighter than Notion but still calm */
-  --primary: #4c6ef5;
+  --muted: rgba(47, 42, 36, 0.06);
+  --muted-foreground: #746c63;
+  --border: rgba(71, 62, 52, 0.14);
+  --border-subtle: rgba(71, 62, 52, 0.08);
+  --primary: #5f6f9e;
   --primary-foreground: #ffffff;
-  --accent: rgba(55, 53, 47, 0.06);
+  --accent: rgba(47, 42, 36, 0.05);
   --accent-foreground: #37352f;
-  /* Whimsy: soft pastels for tiny highlights (not loud) */
   --whimsy-peach: #fff4ef;
   --whimsy-sky: #eef4ff;
   --whimsy-mint: #eefaf6;
-  --shadow-card: 0 1px 2px rgba(15, 15, 15, 0.04), 0 0 0 1px rgba(15, 15, 15, 0.04);
-  --shadow-float: 0 4px 12px rgba(15, 15, 15, 0.06);
+  --shadow-card: 0 1px 1px rgba(20, 16, 12, 0.04), 0 0 0 1px rgba(20, 16, 12, 0.04);
+  --shadow-float: 0 8px 24px rgba(20, 16, 12, 0.08);
   --radius: 0.625rem;
   --radius-sm: 0.4375rem;
   --radius-pill: 9999px;
@@ -36,19 +34,19 @@
 
 html.dark {
   color-scheme: dark;
-  --foreground: #e8e6e3;
-  --foreground-soft: rgba(232, 230, 227, 0.7);
-  --sidebar-bg: #252423;
-  --background: #1e1e1e;
-  --card: #2a2a2a;
+  --foreground: #e6ded3;
+  --foreground-soft: rgba(230, 222, 211, 0.72);
+  --sidebar-bg: rgba(27, 25, 23, 0.86);
+  --background: #191715;
+  --card: rgba(35, 32, 29, 0.82);
   --card-foreground: #e8e6e3;
-  --muted: rgba(255, 255, 255, 0.08);
-  --muted-foreground: #a8a5a0;
-  --border: #3d3c3a;
-  --border-subtle: #333230;
-  --primary: #7c9eff;
+  --muted: rgba(255, 248, 235, 0.08);
+  --muted-foreground: #a69d93;
+  --border: rgba(230, 214, 191, 0.17);
+  --border-subtle: rgba(230, 214, 191, 0.1);
+  --primary: #8c9ac8;
   --primary-foreground: #1a1a1a;
-  --accent: rgba(255, 255, 255, 0.08);
+  --accent: rgba(255, 248, 235, 0.08);
   --accent-foreground: #e8e6e3;
   --whimsy-peach: #3a302c;
   --whimsy-sky: #2a3140;
@@ -75,13 +73,41 @@ html.dark {
 }
 
 body {
-  background: var(--background);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(169, 149, 126, 0.1), transparent 40%),
+    radial-gradient(circle at 88% 16%, rgba(151, 163, 182, 0.1), transparent 34%),
+    var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system, sans-serif;
   font-size: 15px;
   -webkit-font-smoothing: antialiased;
   font-feature-settings: "kern" 1, "liga" 1;
   line-height: var(--line-height-normal);
+  transition:
+    background-color 240ms ease,
+    color 200ms ease;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.26;
+  background-image:
+    linear-gradient(transparent 96%, rgba(73, 64, 55, 0.06) 100%),
+    linear-gradient(90deg, transparent 97%, rgba(73, 64, 55, 0.035) 100%);
+  background-size: 24px 24px, 24px 24px;
+  z-index: -1;
+}
+
+html.dark body::before {
+  opacity: 0.18;
+}
+
+::selection {
+  background: rgba(97, 115, 161, 0.22);
+  color: var(--foreground);
 }
 
 .prose-width {

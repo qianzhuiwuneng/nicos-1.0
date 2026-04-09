@@ -28,7 +28,7 @@ export function AppLayout({
           {topbarRight}
         </Topbar>
         <main
-          className={narrow ? "mx-auto max-w-[var(--content-width-wide)] px-8 py-10" : "px-8 py-10"}
+          className={narrow ? "mx-auto max-w-[var(--content-width-wide)] px-10 py-12" : "px-10 py-12"}
         >
           {children}
           <WeeklyReviewFooter />

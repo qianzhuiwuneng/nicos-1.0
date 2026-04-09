@@ -17,8 +17,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Nicos 1.0 — Personal Operating System",
-  description: "A personal operating system for beauty, taste, feelings, and becoming.",
+  title: "Nicos — A Year in Practice",
+  description: "A quiet, reflective container for your year-long becoming journey.",
 };
 
 export default function RootLayout({
