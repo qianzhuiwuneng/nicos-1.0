@@ -512,50 +512,44 @@ export const identityNotes: IdentityNote[] = [
   {
     id: "id1",
     section: "woman_i_want_to_become",
-    title: "The woman I want to become",
-    content:
-      "Someone who is clear without being cold. Who dresses for herself first — not for the algorithm or the room. Who moves through the world with quiet confidence: less explaining, more being. Who ages with curiosity, not fear. Who has a point of view on beauty and taste that is hers, not borrowed.",
-    updatedAt: "2025-03-01",
+    title: "",
+    content: "",
+    updatedAt: "",
   },
   {
     id: "id2",
     section: "first_glance",
-    title: "What I want people to feel at first glance",
-    content:
-      "Put-together but not stiff. Approachable. Like I have my act together without needing to prove it. A sense of calm and intention. Not 'trendy' — more 'she knows what works for her.'",
-    updatedAt: "2025-02-28",
+    title: "",
+    content: "",
+    updatedAt: "",
   },
   {
     id: "id3",
     section: "my_elegance",
-    title: "What “my kind of elegance” means",
-    content:
-      "Restraint. Fewer pieces, better quality. Neutral base with one intentional detail. Fabric and cut over logo. Quiet luxury: it doesn’t need to announce itself. Comfort that doesn’t look sloppy. The Row-like clarity, but adapted to my life and budget. Elegance is refusal — I’m learning to refuse the wrong things.",
-    updatedAt: "2025-03-05",
+    title: "",
+    content: "",
+    updatedAt: "",
   },
   {
     id: "id4",
     section: "no_longer_want",
-    title: "What I no longer want to be",
-    content:
-      "The person who buys because it’s trending. Who dresses for others’ approval. Who piles on because more feels safer. Who is too polished but not alive. Who says yes when she means no. Who confuses busy with meaningful.",
-    updatedAt: "2025-02-20",
+    title: "",
+    content: "",
+    updatedAt: "",
   },
   {
     id: "id5",
     section: "style_keywords",
-    title: "Personal style keywords",
-    content:
-      "Minimal. Soft structure. Quiet. Neutral palette (with room for grey-green, dusty rose, cream). Tailored but not stiff. Feminine without fussy. One good piece that does the work. Slightly undone. Quality over quantity. Refusal.",
-    updatedAt: "2025-03-06",
+    title: "",
+    content: "",
+    updatedAt: "",
   },
   {
     id: "id6",
     section: "notes",
-    title: "Notes on beauty, money, taste, and selfhood",
-    content:
-      "Beauty: It’s not about fixing. It’s about becoming. Skincare, hair, posture — they’re part of the system. But the goal is feeling like myself, not looking like someone else.\n\nMoney: I’m willing to invest in things that reduce decision fatigue and last. One great blazer > five okay ones. Experiences (exhibitions, good meals) feed the system. Impulse buys don’t.\n\nTaste: It’s built slowly. I’m collecting references — films, spaces, people — and asking: what can I translate? Not copy. Translate.\n\nSelfhood: This system is for noticing. What works. What doesn’t. What I’m confirming. What I’m eliminating. So that by the end of the year, I have a methodology — not just a wardrobe.",
-    updatedAt: "2025-03-08",
+    title: "",
+    content: "",
+    updatedAt: "",
   },
 ];
 

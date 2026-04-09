@@ -24,25 +24,25 @@ export default function IdentityPage() {
       narrow
     >
       <div className="prose-width mx-auto">
-        <p className="mb-12 text-[14px] text-[var(--muted-foreground)] leading-[var(--line-height-relaxed)]">
-          {t("identity.intro")}
-        </p>
-
         <div className="space-y-12">
           {identityNotes.map((note) => (
             <article key={note.id} className="border-b border-[var(--border-subtle)] pb-12 last:border-0">
               <h2 className="text-[15px] font-medium tracking-[-0.02em] text-[var(--foreground)]">
                 {t(sectionKeyMap[note.section])}
               </h2>
-              <p className="mt-1 text-[12px] text-[var(--muted-foreground)]">
-                {t("identity.updated")} {note.updatedAt}
-              </p>
-              <div
-                className="mt-6 whitespace-pre-wrap text-[14px] leading-[var(--line-height-relaxed)] text-[var(--foreground)]/90"
-                style={{ fontFeatureSettings: "normal" }}
-              >
-                {note.content}
-              </div>
+              {note.updatedAt.trim() ? (
+                <p className="mt-1 text-[12px] text-[var(--muted-foreground)]">
+                  {t("identity.updated")} {note.updatedAt}
+                </p>
+              ) : null}
+              {note.content.trim() ? (
+                <div
+                  className="mt-6 whitespace-pre-wrap text-[14px] leading-[var(--line-height-relaxed)] text-[var(--foreground)]/90"
+                  style={{ fontFeatureSettings: "normal" }}
+                >
+                  {note.content}
+                </div>
+              ) : null}
             </article>
           ))}
         </div>
