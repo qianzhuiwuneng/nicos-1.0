@@ -34,37 +34,37 @@ export default function ThisWeekPage() {
 
   return (
     <AppLayout title={t("thisWeekPage.title")} description={t("thisWeekPage.description")} narrow>
-      <div className="mx-auto max-w-[var(--content-width)]">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--muted-foreground)]">
+      <div className="mx-auto max-w-[42rem] pb-16 pt-2">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.13em] text-[var(--muted-foreground)]">
           {t("thisWeekPage.phaseLabel")}
         </p>
         {phaseName && (
-          <p className="mt-1 text-[13px] text-[var(--primary)]">{phaseName}</p>
+          <p className="mt-2 text-[13px] text-[var(--primary)]/90">{phaseName}</p>
         )}
-        <h1 className="mt-4 text-[clamp(1.35rem,3vw,1.75rem)] font-medium tracking-tight text-[var(--foreground)] leading-tight">
+        <h1 className="mt-5 text-[clamp(1.35rem,3vw,1.75rem)] font-medium tracking-tight text-[var(--foreground)] leading-[1.2]">
           {weekLabel}
           <span className="text-[var(--muted-foreground)]"> · </span>
           {title}
         </h1>
 
-        <div className="mt-10 rounded-[var(--radius)] border border-[var(--border-subtle)] bg-[var(--card)] p-6">
-          <h2 className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--muted-foreground)]">
+        <div className="mt-12 border-t border-[var(--border-subtle)] pt-10">
+          <h2 className="text-[10px] font-semibold uppercase tracking-[0.13em] text-[var(--muted-foreground)]">
             {t("program.coreGoal")}
           </h2>
-          <p className="mt-4 text-[15px] leading-[var(--line-height-relaxed)] text-[var(--foreground)]">
+          <p className="mt-4 text-[15px] leading-[1.9] text-[var(--foreground)]/92">
             {entry.goalZh}
           </p>
         </div>
 
-        <div className="mt-10">
-          <h2 className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--muted-foreground)]">
+        <div className="mt-12 border-t border-[var(--border-subtle)] pt-10">
+          <h2 className="text-[10px] font-semibold uppercase tracking-[0.13em] text-[var(--muted-foreground)]">
             {t("program.thisWeekTasks")}
           </h2>
-          <ul className="mt-4 space-y-3">
+          <ul className="mt-4 space-y-4">
             {entry.tasksZh.map((item, i) => (
               <li
                 key={i}
-                className="flex gap-3 text-[15px] leading-[var(--line-height-relaxed)] text-[var(--foreground)]"
+                className="flex gap-3 text-[15px] leading-[1.85] text-[var(--foreground)]/92"
               >
                 <span className="shrink-0 text-[var(--muted-foreground)]">—</span>
                 <span>{item}</span>
@@ -73,7 +73,7 @@ export default function ThisWeekPage() {
           </ul>
         </div>
 
-        <p className="mt-8">
+        <p className="mt-10 border-t border-[var(--border-subtle)] pt-8">
           <Link
             href={`/journey?week=${currentWeek}`}
             className="text-[13px] font-medium text-[var(--muted-foreground)] underline-offset-4 transition-colors hover:text-[var(--foreground)] hover:underline"
@@ -84,7 +84,7 @@ export default function ThisWeekPage() {
 
         <WeeklyReviewEditor
           programWeek={currentWeek}
-          className="mt-16 border-t border-[var(--border-subtle)] pt-12"
+          className="mt-14 border-t border-[var(--border-subtle)] pt-12"
           showOpenFullLink
         />
       </div>

@@ -41,9 +41,9 @@ export const translations = {
       title: "Now",
       description: "A quiet place to see where you are in the year.",
       opener:
-        "Nicos holds a year of practice — not tasks to clear, but threads to follow. Return here when you need orientation, not pressure.",
+        "Nicos holds a year of practice — not tasks to clear, but threads to notice. Return here when you want to revisit what is becoming clearer.",
       yearThemeLine: "Year theme",
-      yearThemeUnset: "Name what this year is about for you — in one sentence.",
+      yearThemeUnset: "Let this stay here for now: one sentence for what this year is asking of you.",
       thisWeekLabel: "This week",
       openThisWeek: "Enter this week",
       openJourney: "Open the full map",
@@ -349,9 +349,9 @@ export const translations = {
       title: "此刻",
       description: "看清自己处在这一年的哪一段。",
       opener:
-        "Nicos 承载一年的修习——不是要清掉的任务，而是可以接续的线。需要方向感时回到这里，而不是压力。",
+        "Nicos 承载一年的修习——不是要清掉的任务，而是可以被留意、被回看的线。需要方向感时回到这里。",
       yearThemeLine: "年度主题",
-      yearThemeUnset: "用一句话写下：这一年对你意味着什么。",
+      yearThemeUnset: "先让它停在这里：用一句话写下这一年正在向你显现什么。",
       thisWeekLabel: "本周",
       openThisWeek: "进入本周",
       openJourney: "打开完整地图",

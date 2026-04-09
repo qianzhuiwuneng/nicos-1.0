@@ -1,13 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { useLanguage } from "@/context/LanguageContext";
 import { useWeek52Nav } from "@/context/Week52Context";
 import { getWeek52Entry } from "@/lib/week52-data";
 import { loadYearTheme } from "@/lib/yearThemeStorage";
-import { feelingEntries, lookEntries, ledgerEntries } from "@/lib/data";
 
 export default function DashboardPage() {
   const { t, locale } = useLanguage();
@@ -25,87 +24,47 @@ export default function DashboardPage() {
       : currentWeek.titleEn
     : "";
 
-  const gentleSnapshot = useMemo(() => {
-    const latestFeeling = feelingEntries[0]?.title ?? "—";
-    const latestLook = lookEntries[0]?.title ?? "—";
-    const latestLedger = ledgerEntries[0]?.title ?? "—";
-    return { latestFeeling, latestLook, latestLedger };
-  }, []);
-
   return (
     <AppLayout title={t("home.title")} description={t("home.description")} narrow>
-      <div className="mx-auto max-w-[var(--content-width)] pb-12">
-        <p className="max-w-2xl text-[16px] leading-[var(--line-height-relaxed)] text-[var(--foreground)]/90">
+      <div className="mx-auto max-w-[42rem] pb-20 pt-2">
+        <p className="max-w-xl text-[15px] leading-[1.9] text-[var(--foreground)]/88">
           {t("home.opener")}
         </p>
 
-        <div className="mt-10 rounded-[var(--radius)] border border-[var(--border-subtle)] bg-[var(--card)] p-6">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--muted-foreground)]">
+        <section className="mt-16 border-t border-[var(--border-subtle)] pt-10">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.13em] text-[var(--muted-foreground)]">
             {t("home.yearThemeLine")}
           </p>
-          <p className="mt-2 text-[15px] leading-relaxed text-[var(--foreground)]">
+          <p className="mt-3 text-[15px] leading-[1.85] text-[var(--foreground)]/90">
             {yearTheme || t("home.yearThemeUnset")}
           </p>
-        </div>
+        </section>
 
-        <div className="mt-8 grid gap-5 lg:grid-cols-2">
-          <section className="rounded-[var(--radius)] border border-[var(--border-subtle)] bg-[var(--card)] p-6">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--muted-foreground)]">
-              {t("home.thisWeekLabel")}
-            </p>
-            <p className="mt-3 text-[15px] leading-relaxed text-[var(--foreground)]">
-              {locale === "zh" ? `第 ${focusWeek} 周` : `Week ${focusWeek}`}
-              {thisWeekTitle && (
-                <>
-                  <span className="text-[var(--muted-foreground)]"> · </span>
-                  {thisWeekTitle}
-                </>
-              )}
-            </p>
-            <div className="mt-6 flex flex-wrap gap-4">
-              <Link
-                href="/this-week"
-                className="text-[13px] font-medium text-[var(--foreground)] underline-offset-4 hover:underline"
-              >
-                {t("home.openThisWeek")}
-              </Link>
-              <Link
-                href={`/journey?week=${focusWeek}`}
-                className="text-[13px] font-medium text-[var(--muted-foreground)] underline-offset-4 hover:text-[var(--foreground)] hover:underline"
-              >
-                {t("home.openJourney")}
-              </Link>
-            </div>
-          </section>
-
-          <section className="rounded-[var(--radius)] border border-[var(--border-subtle)] bg-[var(--card)] p-6">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--muted-foreground)]">
-              {t("home.archiveHint")}
-            </p>
-            <ul className="mt-3 space-y-2 text-[14px] text-[var(--foreground)]/88">
-              <li>{gentleSnapshot.latestFeeling}</li>
-              <li>{gentleSnapshot.latestLook}</li>
-              <li>{gentleSnapshot.latestLedger}</li>
-            </ul>
-          </section>
-        </div>
-
-        <section className="mt-10 rounded-[var(--radius)] border border-[var(--border-subtle)] bg-[var(--card)] p-6">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--muted-foreground)]">
-            {t("home.insightsHint")}
+        <section className="mt-12 border-t border-[var(--border-subtle)] pt-10">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.13em] text-[var(--muted-foreground)]">
+            {t("home.thisWeekLabel")}
           </p>
-          <div className="mt-3 flex flex-wrap gap-4">
+          <p className="mt-3 text-[15px] leading-relaxed text-[var(--foreground)]/90">
+            {locale === "zh" ? `第 ${focusWeek} 周` : `Week ${focusWeek}`}
+            {thisWeekTitle && (
+              <>
+                <span className="text-[var(--muted-foreground)]"> · </span>
+                {thisWeekTitle}
+              </>
+            )}
+          </p>
+          <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2">
             <Link
-              href="/weekly"
+              href="/this-week"
               className="text-[13px] font-medium text-[var(--foreground)] underline-offset-4 hover:underline"
             >
-              {t("nav.weeklyInsights")}
+              {t("home.openThisWeek")}
             </Link>
             <Link
-              href="/monthly"
+              href={`/journey?week=${focusWeek}`}
               className="text-[13px] font-medium text-[var(--foreground)] underline-offset-4 hover:underline"
             >
-              {t("nav.monthlyPatterns")}
+              {t("home.openJourney")}
             </Link>
             <Link
               href="/insights/memory"
@@ -114,6 +73,17 @@ export default function DashboardPage() {
               {t("nav.memorySurface")}
             </Link>
           </div>
+        </section>
+
+        <section className="mt-12 border-t border-[var(--border-subtle)] pt-10">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.13em] text-[var(--muted-foreground)]">
+            {t("home.archiveHint")}
+          </p>
+          <p className="mt-3 max-w-xl text-[14px] leading-[1.9] text-[var(--muted-foreground)]">
+            {locale === "zh"
+              ? "回到感受、穿搭、账本、阅读与观影。让已经发生的事慢慢变得更清楚。"
+              : "Return to feelings, looks, ledger, reading, and watching. Let what already happened become clearer over time."}
+          </p>
         </section>
       </div>
     </AppLayout>
