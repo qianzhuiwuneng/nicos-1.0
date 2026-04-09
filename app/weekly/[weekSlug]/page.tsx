@@ -175,7 +175,7 @@ export default function WeeklyDetailPage() {
 
           <section className="mt-12 border-t border-[var(--border-subtle)] pt-8">
             <h3 className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[var(--muted-foreground)]">
-              This Week&apos;s Reading
+              {locale === "zh" ? "本周阅读" : "This Week's Reading"}
             </h3>
             {weeklyHub.reading.length > 0 ? (
               <div className="mt-4 grid gap-4 sm:grid-cols-2">
@@ -200,14 +200,57 @@ export default function WeeklyDetailPage() {
                       href={`/reading#week-${selected.programWeek}`}
                       className="mt-3 inline-flex text-[12px] font-medium text-[var(--primary)] underline-offset-4 hover:underline"
                     >
-                      Open in Reading
+                      {locale === "zh" ? "在阅读中打开" : "Open in Reading"}
                     </Link>
                   </article>
                 ))}
               </div>
             ) : (
               <p className="mt-4 text-[13px] text-[var(--muted-foreground)]">
-                No linked reading for this week yet.
+                {locale === "zh" ? "本周暂无关联书目。" : "No linked reading for this week yet."}
+              </p>
+            )}
+          </section>
+
+          <section className="mt-12 border-t border-[var(--border-subtle)] pt-8">
+            <h3 className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[var(--muted-foreground)]">
+              {locale === "zh" ? "本周观影" : "This Week's Watching"}
+            </h3>
+            {weeklyHub.watching.length > 0 ? (
+              <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                {weeklyHub.watching.map((film) => (
+                  <article
+                    key={film.id}
+                    className="rounded-[var(--radius-sm)] border border-[var(--border-subtle)] bg-[var(--card)]/55 p-4"
+                  >
+                    <BookCover
+                      src={film.coverImage}
+                      title={film.title}
+                      author={film.director}
+                      toneClassName={film.coverTone}
+                      className="max-w-[10.5rem]"
+                    />
+                    {film.director.trim() ? (
+                      <p className="mt-3 text-[11px] uppercase tracking-[0.08em] text-[var(--muted-foreground)]">
+                        {film.director}
+                      </p>
+                    ) : null}
+                    <p className="mt-1 text-[14px] font-medium text-[var(--foreground)]">{film.title}</p>
+                    <p className="mt-1 text-[12px] text-[var(--muted-foreground)]">
+                      {locale === "zh" ? film.taglineZh : film.tagline}
+                    </p>
+                    <Link
+                      href={`/watching#week-${selected.programWeek}`}
+                      className="mt-3 inline-flex text-[12px] font-medium text-[var(--primary)] underline-offset-4 hover:underline"
+                    >
+                      {locale === "zh" ? "在观影中打开" : "Open in Watching"}
+                    </Link>
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <p className="mt-4 text-[13px] text-[var(--muted-foreground)]">
+                {locale === "zh" ? "本周暂无关联影片。" : "No linked film for this week yet."}
               </p>
             )}
           </section>

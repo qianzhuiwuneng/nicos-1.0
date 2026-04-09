@@ -32,7 +32,9 @@ export function BookCover({
       ) : (
         <div className="flex h-full flex-col items-center justify-center px-5 text-center">
           <p className="text-[16px] font-medium leading-snug text-[var(--foreground)]">{title}</p>
-          <p className="mt-2 text-[11px] uppercase tracking-[0.08em] text-[var(--muted-foreground)]">{author}</p>
+          {author.trim() ? (
+            <p className="mt-2 text-[11px] uppercase tracking-[0.08em] text-[var(--muted-foreground)]">{author}</p>
+          ) : null}
         </div>
       )}
     </div>

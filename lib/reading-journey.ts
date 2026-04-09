@@ -1,4 +1,5 @@
 import { getProgramWeekBounds } from "@/lib/program-week";
+import { getWatchingForWeek } from "@/lib/watching-journey";
 
 export type ReadingJourneyBook = {
   id: string;
@@ -135,6 +136,7 @@ export function getWeeklyHubContent(week: number) {
   return {
     week,
     reading: getReadingForWeek(week),
+    watching: getWatchingForWeek(week),
     reflections: [], // reserved for linking week-tagged reflection entries
     notes: [], // reserved for linking week-tagged notes/fragments
     insights: [], // reserved for linking week-tagged insight summaries
