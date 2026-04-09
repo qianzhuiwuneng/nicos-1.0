@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { AppLayout } from "@/components/layout/AppLayout";
+import { BookCover } from "@/components/reading/BookCover";
 import { WeeklyReviewDisplay } from "@/components/weekly/WeeklyReviewDisplay";
 import { WeeklyCloudSetup } from "@/components/weekly/WeeklyCloudSetup";
 import { weeklyReviews } from "@/lib/data";
@@ -183,11 +184,13 @@ export default function WeeklyDetailPage() {
                     key={book.id}
                     className="rounded-[var(--radius-sm)] border border-[var(--border-subtle)] bg-[var(--card)]/55 p-4"
                   >
-                    <div className={`aspect-[3/4] w-full max-w-[10.5rem] border border-[var(--border)] ${book.coverTone}`}>
-                      <div className="flex h-full items-center justify-center px-3 text-center">
-                        <p className="text-[15px] font-medium leading-snug text-[var(--foreground)]">{book.title}</p>
-                      </div>
-                    </div>
+                    <BookCover
+                      src={book.coverImage}
+                      title={book.title}
+                      author={book.author}
+                      toneClassName={book.coverTone}
+                      className="max-w-[10.5rem]"
+                    />
                     <p className="mt-3 text-[11px] uppercase tracking-[0.08em] text-[var(--muted-foreground)]">
                       {book.author}
                     </p>

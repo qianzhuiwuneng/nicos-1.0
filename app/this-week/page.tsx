@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect } from "react";
 import { AppLayout } from "@/components/layout/AppLayout";
+import { BookCover } from "@/components/reading/BookCover";
 import { useLanguage } from "@/context/LanguageContext";
 import { useWeek52Nav } from "@/context/Week52Context";
 import { getPhaseForWeek, getWeek52Entry } from "@/lib/week52-data";
@@ -82,13 +83,13 @@ export default function ThisWeekPage() {
           </h2>
           {thisWeekReading ? (
             <article className="mt-4 rounded-[var(--radius-sm)] border border-[var(--border-subtle)] bg-[var(--card)]/55 p-4">
-              <div className={`aspect-[3/4] w-full max-w-[11rem] border border-[var(--border)] ${thisWeekReading.coverTone}`}>
-                <div className="flex h-full items-center justify-center px-4 text-center">
-                  <p className="text-[16px] font-medium leading-snug text-[var(--foreground)]">
-                    {thisWeekReading.title}
-                  </p>
-                </div>
-              </div>
+              <BookCover
+                src={thisWeekReading.coverImage}
+                title={thisWeekReading.title}
+                author={thisWeekReading.author}
+                toneClassName={thisWeekReading.coverTone}
+                className="max-w-[11rem]"
+              />
               <p className="mt-4 text-[12px] uppercase tracking-[0.08em] text-[var(--muted-foreground)]">
                 {thisWeekReading.author}
               </p>

@@ -49,7 +49,11 @@ export function extractBoldSentences(value: string): string[] {
   if (!value.trim() || !isProbablyHtml(value)) return [];
   const parser = new DOMParser();
   const doc = parser.parseFromString(value, "text/html");
-  const nodes = Array.from(doc.querySelectorAll("strong, b"));
+  const nodes = Array.from(
+    doc.querySelectorAll(
+      "strong, b, span[style*='font-weight:700'], span[style*='font-weight: 700'], span[style*='font-weight:bold'], span[style*='font-weight: bold']"
+    )
+  );
   const out: string[] = [];
   const seen = new Set<string>();
 
@@ -61,4 +65,8 @@ export function extractBoldSentences(value: string): string[] {
     out.push(text);
   }
   return out;
+}
+
+export function hasSurfaceableBoldSentence(value: string): boolean {
+  return extractBoldSentences(value).length > 0;
 }
