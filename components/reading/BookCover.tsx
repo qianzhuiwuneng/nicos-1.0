@@ -8,7 +8,6 @@ type BookCoverProps = {
   author: string;
   toneClassName?: string;
   className?: string;
-  lotLabel?: string;
 };
 
 export function BookCover({
@@ -17,18 +16,11 @@ export function BookCover({
   author,
   toneClassName = "bg-[var(--muted)]",
   className = "",
-  lotLabel,
 }: BookCoverProps) {
   const [missing, setMissing] = useState(false);
 
   return (
     <div className={`relative aspect-[3/4] w-full overflow-hidden border border-[var(--border)] ${toneClassName} ${className}`}>
-      {lotLabel && (
-        <div className="absolute inset-x-0 top-0 z-10 border-b border-[var(--border)] bg-[var(--background)]/75 px-3 py-2 backdrop-blur-sm">
-          <p className="text-[9px] uppercase tracking-[0.12em] text-[var(--muted-foreground)]">{lotLabel}</p>
-        </div>
-      )}
-
       {!missing ? (
         <img
           src={src}

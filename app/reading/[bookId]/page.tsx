@@ -54,7 +54,6 @@ export default function ReadingBookDetailPage() {
             author={book.author}
             toneClassName={book.coverTone}
             className="max-w-[14rem]"
-            lotLabel={`Week ${book.week}`}
           />
 
           <div className="mt-6 border-t border-[var(--border-subtle)] pt-5">

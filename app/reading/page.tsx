@@ -73,7 +73,6 @@ export default function ReadingPage() {
                       title={lot.title}
                       author={lot.author}
                       toneClassName={lot.coverTone}
-                      lotLabel={`Week ${lot.week}`}
                     />
 
                     <div className="mt-4 border-t border-[var(--border-subtle)] pt-4">
