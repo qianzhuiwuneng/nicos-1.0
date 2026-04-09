@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
 import { WeeklyReviewDisplay } from "@/components/weekly/WeeklyReviewDisplay";
@@ -20,6 +20,7 @@ import {
   mergeRemoteAndLocal,
   saveWeeklyReviewCloud,
 } from "@/lib/weekly-review-cloud";
+import { sanitizeRichHtml, toEditorHtml } from "@/lib/weekly-richtext";
 
 function dispatchWeeklyReviewSaved() {
   if (typeof window !== "undefined") {
@@ -50,6 +51,8 @@ export function WeeklyReviewEditor({
 
   const [values, setValues] = useState<WeeklyReviewValues>({});
   const [isEditing, setIsEditing] = useState(true);
+  const [editorInitial, setEditorInitial] = useState<WeeklyReviewValues>({});
+  const editorRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
   const base = useMemo(
     () => weeklyReviews.find((w) => w.programWeek === programWeek),
@@ -66,6 +69,7 @@ export function WeeklyReviewEditor({
       localNormalized[p.id] = local[p.id] ?? "";
     }
     setValues(localNormalized);
+    setEditorInitial(localNormalized);
     setIsEditing(!hasAnyValue(localNormalized, ids));
 
     (async () => {
@@ -73,6 +77,7 @@ export function WeeklyReviewEditor({
       if (cancelled) return;
       const merged = mergeRemoteAndLocal(remote, localNormalized, ids);
       setValues(merged);
+      setEditorInitial(merged);
       setIsEditing(!hasAnyValue(merged, ids));
     })();
 
@@ -84,6 +89,14 @@ export function WeeklyReviewEditor({
   const setField = useCallback((id: string, value: string) => {
     setValues((v) => ({ ...v, [id]: value }));
   }, []);
+
+  const applyFormat = useCallback((id: string, command: string, value?: string) => {
+    const el = editorRefs.current[id];
+    if (!el) return;
+    el.focus();
+    document.execCommand(command, false, value);
+    setField(id, sanitizeRichHtml(el.innerHTML));
+  }, [setField]);
 
   const handleSave = useCallback(async () => {
     try {
@@ -158,12 +171,47 @@ export function WeeklyReviewEditor({
               <span className="text-[14px] font-medium leading-snug text-[var(--foreground)]">
                 {p.label}
               </span>
-              <textarea
-                value={values[p.id] ?? ""}
-                onChange={(e) => setField(p.id, e.target.value)}
-                rows={5}
-                className="mt-3 w-full resize-y rounded-[var(--radius-sm)] border border-[var(--border-subtle)] bg-[var(--background)] px-3 py-3 text-[14px] leading-[1.75] text-[var(--foreground)] outline-none transition-shadow placeholder:text-[var(--muted-foreground)] focus:shadow-[0_0_0_1px_var(--border)]"
-              />
+              <div className="mt-3 rounded-[var(--radius-sm)] border border-[var(--border-subtle)] bg-[var(--background)]">
+                <div className="flex items-center gap-1 border-b border-[var(--border-subtle)] px-2 py-1.5">
+                  <button
+                    type="button"
+                    className="rounded px-2 py-1 text-[12px] text-[var(--muted-foreground)] hover:bg-[var(--muted)]"
+                    onClick={() => applyFormat(p.id, "bold")}
+                  >
+                    B
+                  </button>
+                  <button
+                    type="button"
+                    className="rounded px-2 py-1 text-[12px] text-[var(--muted-foreground)] hover:bg-[var(--muted)]"
+                    onClick={() => applyFormat(p.id, "formatBlock", "P")}
+                  >
+                    P
+                  </button>
+                  <button
+                    type="button"
+                    className="rounded px-2 py-1 text-[12px] text-[var(--muted-foreground)] hover:bg-[var(--muted)]"
+                    onClick={() => applyFormat(p.id, "formatBlock", "H3")}
+                  >
+                    H
+                  </button>
+                </div>
+                <div
+                  key={`${p.id}-${programWeek}-${isEditing ? "edit" : "view"}`}
+                  ref={(el) => {
+                    editorRefs.current[p.id] = el;
+                    if (el && el.innerHTML.trim() === "") {
+                      el.innerHTML = toEditorHtml(editorInitial[p.id] ?? "");
+                    }
+                  }}
+                  contentEditable
+                  suppressContentEditableWarning
+                  className="min-h-[8.5rem] w-full px-3 py-3 text-[14px] leading-[1.75] text-[var(--foreground)] outline-none"
+                  onInput={(e) => {
+                    const html = (e.currentTarget as HTMLDivElement).innerHTML;
+                    setField(p.id, sanitizeRichHtml(html));
+                  }}
+                />
+              </div>
             </label>
           ))}
           <div className="pt-1">
@@ -175,7 +223,14 @@ export function WeeklyReviewEditor({
       ) : (
         <div className="rounded-[var(--radius)] border border-[var(--border-subtle)] bg-[var(--card)] p-6 shadow-[var(--shadow-card)]">
           <div className="mb-6 flex justify-end border-b border-[var(--border-subtle)] pb-4">
-            <button type="button" onClick={() => setIsEditing(true)} className="notion-edit-btn">
+            <button
+              type="button"
+              onClick={() => {
+                setEditorInitial(values);
+                setIsEditing(true);
+              }}
+              className="notion-edit-btn"
+            >
               {t("weekly.footerEdit")}
             </button>
           </div>

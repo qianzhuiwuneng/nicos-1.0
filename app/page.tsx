@@ -7,10 +7,10 @@ import { useLanguage } from "@/context/LanguageContext";
 import { useWeek52Nav } from "@/context/Week52Context";
 import { getWeek52Entry } from "@/lib/week52-data";
 import { loadYearTheme } from "@/lib/yearThemeStorage";
-import { surfaceLineCandidates } from "@/lib/surface-lines";
 import { getWeeklyReviewPrompts } from "@/lib/weekly-review-prompts";
 import { loadWeeklyReviewValues, type WeeklyReviewValues } from "@/lib/weekly-review-storage";
 import { fetchWeeklyReviewCloud } from "@/lib/weekly-review-cloud";
+import { extractBoldSentences } from "@/lib/weekly-richtext";
 
 type SurfacedLine = {
   id: string;
@@ -33,6 +33,10 @@ function pickExcerpt(source: string, max = 110): string {
   const compact = source.replace(/\s+/g, " ").trim();
   if (compact.length <= max) return compact;
   return `${compact.slice(0, max).trimEnd()}…`;
+}
+
+function weekToMonth(week: number): number {
+  return Math.floor((Math.max(1, week) - 1) / 4) + 1;
 }
 
 function randomPick<T>(list: T[], excludeIndex?: number): { value: T; index: number } | null {
@@ -58,32 +62,35 @@ export default function DashboardPage() {
     let cancelled = false;
     async function run() {
       const byWeek = new Map<number, WeeklyReviewValues>();
-      for (const c of surfaceLineCandidates) {
-        if (!byWeek.has(c.week)) {
-          const local = loadWeeklyReviewValues(c.week);
-          const remote = await fetchWeeklyReviewCloud(c.week);
-          byWeek.set(c.week, mergeValues(remote, local));
-        }
+      for (let week = 1; week <= 52; week += 1) {
+        const local = loadWeeklyReviewValues(week);
+        const remote = await fetchWeeklyReviewCloud(week);
+        byWeek.set(week, mergeValues(remote, local));
       }
 
       const built: SurfacedLine[] = [];
-      for (const candidate of surfaceLineCandidates) {
-        if (!candidate.surfaceable) continue;
-        const values = byWeek.get(candidate.week) ?? {};
-        const full = (values[candidate.promptId] ?? "").trim();
-        if (!full) continue;
-        const prompts = getWeeklyReviewPrompts(candidate.week, locale);
-        const sectionTitle =
-          prompts.find((p) => p.id === candidate.promptId)?.label ??
-          (locale === "zh" ? "周复盘条目" : "Weekly reflection section");
-        built.push({
-          id: candidate.id,
-          text: pickExcerpt(full),
-          week: candidate.week,
-          month: candidate.month,
-          sectionTitle,
-          link: `/weekly/week-${candidate.week}`,
-        });
+      for (let week = 1; week <= 52; week += 1) {
+        const values = byWeek.get(week) ?? {};
+        const prompts = getWeeklyReviewPrompts(week, locale);
+        const promptMap = new Map(prompts.map((p) => [p.id, p.label]));
+        for (const [promptId, full] of Object.entries(values)) {
+          const text = (full ?? "").trim();
+          if (!text) continue;
+          const boldSentences = extractBoldSentences(text);
+          if (boldSentences.length === 0) continue;
+          const sectionTitle =
+            promptMap.get(promptId) ?? (locale === "zh" ? "周复盘条目" : "Weekly reflection section");
+          for (const sentence of boldSentences) {
+            built.push({
+              id: `line-w${week}-${promptId}-${sentence.slice(0, 16)}`,
+              text: pickExcerpt(sentence),
+              week,
+              month: weekToMonth(week),
+              sectionTitle,
+              link: `/weekly/week-${week}`,
+            });
+          }
+        }
       }
 
       if (!cancelled) {
