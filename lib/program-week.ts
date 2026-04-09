@@ -2,6 +2,8 @@ import type { Locale } from "@/lib/i18n";
 
 /** 52 周方案第 1 周起始日（含）：2026-03-02，每周 7 天。 */
 const WEEK_ONE_START = new Date(2026, 2, 2);
+const WEEK_ONE_START_ISO = "2026-03-02";
+const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
 function pad(n: number) {
   return String(n).padStart(2, "0");
@@ -18,6 +20,22 @@ export function getProgramWeekBounds(programWeek: number): { weekStart: string; 
   const end = new Date(start);
   end.setDate(start.getDate() + 6);
   return { weekStart: toISODate(start), weekEnd: toISODate(end) };
+}
+
+function startOfLocalDay(d: Date): Date {
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+}
+
+/**
+ * Current program week:
+ * floor((today - startDate) / 7) + 1, clamped to 1..52.
+ */
+export function getCurrentProgramWeek(today: Date = new Date()): number {
+  const start = startOfLocalDay(new Date(WEEK_ONE_START_ISO + "T00:00:00"));
+  const now = startOfLocalDay(today);
+  const dayDelta = Math.floor((now.getTime() - start.getTime()) / MS_PER_DAY);
+  const raw = Math.floor(dayDelta / 7) + 1;
+  return Math.min(52, Math.max(1, raw));
 }
 
 /** 例如 zh：`2026.3.2–2026.3.8`；en：`Mar 2 – Mar 8, 2026` */

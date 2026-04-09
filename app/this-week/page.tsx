@@ -1,18 +1,25 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect } from "react";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { useLanguage } from "@/context/LanguageContext";
 import { useWeek52Nav } from "@/context/Week52Context";
 import { getPhaseForWeek, getWeek52Entry } from "@/lib/week52-data";
 import { WeeklyReviewEditor } from "@/components/weekly/WeeklyReviewEditor";
+import { getCurrentProgramWeek } from "@/lib/program-week";
 
 export default function ThisWeekPage() {
   const { t, locale } = useLanguage();
-  const { focusWeek } = useWeek52Nav();
-  const entry = getWeek52Entry(focusWeek);
-  const phase = getPhaseForWeek(focusWeek);
-  const weekLabel = locale === "zh" ? `第 ${focusWeek} 周` : `Week ${focusWeek}`;
+  const { setFocusWeek } = useWeek52Nav();
+  const currentWeek = getCurrentProgramWeek();
+  const entry = getWeek52Entry(currentWeek);
+  const phase = getPhaseForWeek(currentWeek);
+  const weekLabel = locale === "zh" ? `第 ${currentWeek} 周` : `Week ${currentWeek}`;
+
+  useEffect(() => {
+    setFocusWeek(currentWeek);
+  }, [currentWeek, setFocusWeek]);
 
   if (!entry) {
     return (
@@ -68,7 +75,7 @@ export default function ThisWeekPage() {
 
         <p className="mt-8">
           <Link
-            href={`/journey?week=${focusWeek}`}
+            href={`/journey?week=${currentWeek}`}
             className="text-[13px] font-medium text-[var(--muted-foreground)] underline-offset-4 transition-colors hover:text-[var(--foreground)] hover:underline"
           >
             {t("thisWeekPage.openMap")}
@@ -76,7 +83,7 @@ export default function ThisWeekPage() {
         </p>
 
         <WeeklyReviewEditor
-          programWeek={focusWeek}
+          programWeek={currentWeek}
           className="mt-16 border-t border-[var(--border-subtle)] pt-12"
           showOpenFullLink
         />
