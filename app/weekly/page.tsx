@@ -3,12 +3,14 @@
 import { useEffect, useMemo, useState } from "react";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { WeeklyReviewDisplay } from "@/components/weekly/WeeklyReviewDisplay";
+import { WeeklyCloudSetup } from "@/components/weekly/WeeklyCloudSetup";
 import { weeklyReviews } from "@/lib/data";
 import { useLanguage } from "@/context/LanguageContext";
 import { useWeek52Nav } from "@/context/Week52Context";
 import { formatProgramWeekRangeLabel } from "@/lib/program-week";
 import { getWeeklyReviewPrompts } from "@/lib/weekly-review-prompts";
-import { loadWeeklyReviewValues } from "@/lib/weekly-review-storage";
+import { type WeeklyReviewValues, loadWeeklyReviewValues } from "@/lib/weekly-review-storage";
+import { fetchWeeklyReviewCloud, mergeRemoteAndLocal } from "@/lib/weekly-review-cloud";
 
 export default function WeeklyPage() {
   const { t, locale } = useLanguage();
@@ -38,11 +40,26 @@ export default function WeeklyPage() {
     () => getWeeklyReviewPrompts(selected.programWeek, locale),
     [selected.programWeek, locale]
   );
+  const [values, setValues] = useState<WeeklyReviewValues>({});
 
-  const values = useMemo(
-    () => loadWeeklyReviewValues(selected.programWeek),
-    [selected.programWeek, dataRev]
-  );
+  useEffect(() => {
+    let cancelled = false;
+    const ids = prompts.map((p) => p.id);
+    const local = loadWeeklyReviewValues(selected.programWeek);
+    const localNormalized: WeeklyReviewValues = {};
+    for (const p of prompts) localNormalized[p.id] = local[p.id] ?? "";
+    setValues(localNormalized);
+
+    (async () => {
+      const remote = await fetchWeeklyReviewCloud(selected.programWeek);
+      if (cancelled) return;
+      setValues(mergeRemoteAndLocal(remote, localNormalized, ids));
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [selected.programWeek, prompts, dataRev]);
 
   const rangeLabel = formatProgramWeekRangeLabel(selected.weekStart, selected.weekEnd, locale);
   const programLabel = locale === "zh" ? `第 ${selected.programWeek} 周` : `Week ${selected.programWeek}`;
@@ -76,6 +93,7 @@ export default function WeeklyPage() {
         </aside>
 
         <div className="min-w-0 flex-1 lg:border-l lg:border-[var(--border-subtle)] lg:pl-10 xl:pl-12">
+          <WeeklyCloudSetup />
           <header className="mb-10 border-b border-[var(--border-subtle)] pb-8">
             <h2 className="text-[1.375rem] font-semibold leading-tight tracking-[-0.03em] text-[var(--foreground)] sm:text-2xl">
               {rangeLabel}

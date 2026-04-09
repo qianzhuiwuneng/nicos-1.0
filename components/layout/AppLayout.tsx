@@ -23,7 +23,7 @@ export function AppLayout({
   return (
     <>
       <Sidebar />
-      <div className="min-h-screen pl-52">
+      <div className="min-h-screen pl-60">
         <Topbar title={title} description={description}>
           {topbarRight}
         </Topbar>
