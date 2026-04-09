@@ -136,7 +136,6 @@ export function getWeeklyHubContent(week: number) {
     week,
     reading: getReadingForWeek(week),
     reflections: [], // reserved for linking week-tagged reflection entries
-    feelings: [], // reserved for linking week-tagged feeling entries
     notes: [], // reserved for linking week-tagged notes/fragments
     insights: [], // reserved for linking week-tagged insight summaries
   };

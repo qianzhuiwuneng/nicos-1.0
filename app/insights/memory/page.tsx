@@ -8,8 +8,6 @@ export default function MemorySurfacePage() {
   const { t } = useLanguage();
 
   const links = [
-    { href: "/feelings", label: t("insightsMemory.linkFeelings") },
-    { href: "/looks", label: t("insightsMemory.linkLooks") },
     { href: "/reading", label: t("insightsMemory.linkReading") },
     { href: "/watching", label: t("insightsMemory.linkWatching") },
   ] as const;

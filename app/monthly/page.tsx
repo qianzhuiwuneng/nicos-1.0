@@ -138,13 +138,13 @@ export default function MonthlyPage() {
           <Card className="border-[var(--border-subtle)]">
             <CardContent className="p-6">
               <h3 className="text-[11px] font-medium uppercase tracking-[0.05em] text-[var(--muted-foreground)]">
-                {t("monthly.bestLooksAndInspirations")}
+                {locale === "zh" ? "本月片段" : "Monthly Highlights"}
               </h3>
               <p className="mt-2 text-[14px] text-[var(--foreground)] leading-[var(--line-height-relaxed)]">
-                {t("monthly.looks")}: {selected.bestLooks.join("; ")}
+                {locale === "zh" ? "观察" : "Observations"}: {selected.bestLooks.join("; ")}
               </p>
               <p className="mt-1 text-[14px] text-[var(--foreground)] leading-[var(--line-height-relaxed)]">
-                {t("monthly.inspiration")}: {selected.bestInspirations.join("; ")}
+                {locale === "zh" ? "启发" : "Resonances"}: {selected.bestInspirations.join("; ")}
               </p>
             </CardContent>
           </Card>

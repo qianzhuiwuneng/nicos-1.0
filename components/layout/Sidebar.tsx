@@ -5,21 +5,18 @@ import { usePathname } from "next/navigation";
 import type { ComponentType, ReactNode } from "react";
 import {
   BookMarked,
-  BookOpen,
   Bookmark,
   Calendar,
   CalendarClock,
   CircleDot,
   Clapperboard,
   Compass,
-  Heart,
   History,
   LayoutTemplate,
   Layers,
   LineChart,
   MessageCircle,
   Route,
-  Shirt,
   Sparkles,
   Sun,
   User,
@@ -107,9 +104,6 @@ export function Sidebar() {
           <NavLink href="/monthly" label={t("nav.thisMonth")} icon={Calendar} pathname={pathname} />
         </NavGroup>
         <NavGroup label={t("nav.layerArchive")}>
-          <NavLink href="/feelings" label={t("nav.feelings")} icon={Heart} pathname={pathname} />
-          <NavLink href="/looks" label={t("nav.looks")} icon={Shirt} pathname={pathname} />
-          <NavLink href="/ledger" label={t("nav.ledger")} icon={BookOpen} pathname={pathname} />
           <NavLink href="/reading" label={t("nav.reading")} icon={BookMarked} pathname={pathname} />
           <NavLink href="/watching" label={t("nav.watching")} icon={Clapperboard} pathname={pathname} />
           <NavLink href="/fragments" label={t("nav.fragments")} icon={Sparkles} pathname={pathname} />

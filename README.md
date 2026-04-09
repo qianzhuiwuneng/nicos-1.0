@@ -1,6 +1,6 @@
 # Nicos 1.0
 
-A **personal operating system** for beauty, taste, feelings, and becoming. Not a productivity app — a place to record change, capture feelings, spot patterns, and build your own style system.
+A quiet, reflective container for a year-long becoming journey. Not a productivity app — a place to revisit weekly reflections, monthly patterns, reading notes, and what is surfacing now.
 
 ## Stack
 
@@ -23,15 +23,12 @@ Open [http://localhost:3000](http://localhost:3000).
 
 | Route       | Description                          |
 |------------|--------------------------------------|
-| `/`        | Dashboard — welcome, quick actions, weekly focus, monthly overview, recent entries, inspiration, quick links |
-| `/ledger`  | Growth-led spending (categories, effectiveness, repurchase) |
-| `/feelings`| Daily feeling log (mood, energy, moments, confirmed, eliminated) |
-| `/looks`   | Look archive by occasion (gallery, detail modal) |
-| `/taste`   | Aesthetic input (movies, books, exhibitions, brands, etc.) |
+| `/`        | Current Chapter / Home — week context, yearly anchor, and A Line for Now |
+| `/this-week` | Current program week with weekly reflection + linked reading |
 | `/weekly`  | Weekly reflection (theme, best/worst, next micro-adjustments) |
 | `/monthly` | Monthly reflection (keywords, worth it / not, next focus) |
-| `/templates` | Stable templates (repeatable formulas) |
-| `/to-try`  | To try list (Want to try / Planned / Tried / Archived) |
+| `/reading` | Monthly reading archive with synced weekly reading-note excerpts |
+| `/reading/[bookId]` | Full reading-note detail page linked back to weekly reflection |
 | `/identity`| Identity notes (who you’re becoming, elegance, style keywords) |
 
 ## Project structure

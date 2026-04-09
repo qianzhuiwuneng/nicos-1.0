@@ -108,8 +108,8 @@ export default function DashboardPage() {
           </p>
           <p className="mt-3 max-w-xl text-[14px] leading-[1.9] text-[var(--muted-foreground)]">
             {locale === "zh"
-              ? "回到感受、穿搭、账本、阅读与观影。让已经发生的事慢慢变得更清楚。"
-              : "Return to feelings, looks, ledger, reading, and watching. Let what already happened become clearer over time."}
+              ? "回到阅读、观影与周复盘札记。让已经发生的事慢慢变得更清楚。"
+              : "Return to reading, watching, and weekly reflection notes. Let what already happened become clearer over time."}
           </p>
         </section>
 
