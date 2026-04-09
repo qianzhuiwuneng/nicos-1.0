@@ -74,6 +74,10 @@ export function getReadingForWeek(week: number): ReadingJourneyBook[] {
   return readingJourneyBooks.filter((book) => book.week === week);
 }
 
+export function getReadingBookById(id: string): ReadingJourneyBook | undefined {
+  return readingJourneyBooks.find((book) => book.id === id);
+}
+
 export function getReadingMonthSections() {
   const grouped = readingJourneyBooks.reduce<Record<number, ReadingJourneyBook[]>>((acc, lot) => {
     if (!acc[lot.month]) acc[lot.month] = [];

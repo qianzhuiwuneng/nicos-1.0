@@ -5,44 +5,9 @@ import { useEffect, useMemo, useState } from "react";
 import { AppLayout } from "@/components/layout/AppLayout";
 import {
   getReadingMonthSections,
-  readingJourneyBooks,
-  type ReadingJourneyBook,
+  readingJourneyBooks
 } from "@/lib/reading-journey";
-import { getWeeklyReviewPrompts, type WeeklyReviewPrompt } from "@/lib/weekly-review-prompts";
-import { fetchWeeklyReviewCloud, mergeRemoteAndLocal } from "@/lib/weekly-review-cloud";
-import { loadWeeklyReviewValues, type WeeklyReviewValues } from "@/lib/weekly-review-storage";
-
-type SyncedReadingNote = {
-  sectionTitle: string;
-  excerpt: string;
-};
-
-function mergeWeeklyValues(remote: WeeklyReviewValues, local: WeeklyReviewValues): WeeklyReviewValues {
-  const out: WeeklyReviewValues = { ...local };
-  for (const [k, v] of Object.entries(remote)) {
-    if (typeof v === "string" && v.trim().length > 0) out[k] = v;
-  }
-  return out;
-}
-
-function normalizeLabel(source: string): string {
-  return source.replace(/[《》\s"'“”‘’:：—\-]/g, "").toLowerCase();
-}
-
-function extractExcerpt(text: string, maxChars = 120): string {
-  const compact = text.replace(/\s+/g, " ").trim();
-  if (compact.length <= maxChars) return compact;
-  return `${compact.slice(0, maxChars).trimEnd()}…`;
-}
-
-function pickPromptForBook(book: ReadingJourneyBook, prompts: WeeklyReviewPrompt[]): WeeklyReviewPrompt | undefined {
-  if (book.reflectionPromptId) {
-    const exact = prompts.find((p) => p.id === book.reflectionPromptId);
-    if (exact) return exact;
-  }
-  const normalizedTitle = normalizeLabel(book.title);
-  return prompts.find((p) => normalizeLabel(p.label).includes(normalizedTitle));
-}
+import { buildSyncedReadingNotes, type SyncedReadingNote } from "@/lib/reading-note-sync";
 
 export default function ReadingPage() {
   const monthSections = useMemo(() => getReadingMonthSections(), []);
@@ -52,40 +17,7 @@ export default function ReadingPage() {
     let cancelled = false;
 
     async function run() {
-      const weeks = Array.from(
-        new Set(readingJourneyBooks.map((book) => book.reflectionWeek ?? book.week))
-      );
-      const weekValues = new Map<number, WeeklyReviewValues>();
-      const weekPrompts = new Map<number, WeeklyReviewPrompt[]>();
-
-      for (const week of weeks) {
-        const prompts = getWeeklyReviewPrompts(week, "zh");
-        weekPrompts.set(week, prompts);
-        const local = loadWeeklyReviewValues(week);
-        const remote = await fetchWeeklyReviewCloud(week);
-        const promptIds = prompts.map((p) => p.id);
-        // Keep known prompts merged the old way, then layer full remote/local keys
-        // so reflectionPromptId entries are still readable even if prompt config changes.
-        const promptMerged = prompts.length > 0 ? mergeRemoteAndLocal(remote, local, promptIds) : {};
-        weekValues.set(week, { ...mergeWeeklyValues(remote, local), ...promptMerged });
-      }
-
-      const next: Record<string, SyncedReadingNote> = {};
-      for (const book of readingJourneyBooks) {
-        const sourceWeek = book.reflectionWeek ?? book.week;
-        const prompts = weekPrompts.get(sourceWeek) ?? [];
-        const values = weekValues.get(sourceWeek) ?? {};
-        const prompt = pickPromptForBook(book, prompts);
-        const promptId = prompt?.id ?? book.reflectionPromptId;
-        if (!promptId) continue;
-        const text = (values[promptId] ?? "").trim();
-        if (!text) continue;
-        next[book.id] = {
-          sectionTitle: prompt?.label ?? `${book.title} 感受与触动`,
-          excerpt: extractExcerpt(text),
-        };
-      }
-
+      const next = await buildSyncedReadingNotes(readingJourneyBooks);
       if (!cancelled) setSyncedNotes(next);
     }
 
@@ -160,21 +92,40 @@ export default function ReadingPage() {
                         Week {lot.week}
                       </p>
                       <div className="mt-3 border-t border-[var(--border-subtle)] pt-3">
-                        <p className="text-[11px] text-[var(--muted-foreground)]">
-                          {syncedNotes[lot.id]?.sectionTitle ?? "No linked reading-notes section found yet."}
-                        </p>
-                        <p className="mt-1.5 text-[12px] leading-relaxed text-[var(--foreground-soft)]">
-                          {syncedNotes[lot.id]?.excerpt ?? "Save your weekly reading note, then it will appear here automatically."}
-                        </p>
+                        {syncedNotes[lot.id] ? (
+                          <>
+                            <Link
+                              href={`/reading/${lot.id}`}
+                              className="text-[11px] text-[var(--muted-foreground)] underline-offset-4 hover:underline"
+                            >
+                              {syncedNotes[lot.id].sectionTitle}
+                            </Link>
+                            <Link
+                              href={`/reading/${lot.id}`}
+                              className="mt-1.5 block text-[12px] leading-relaxed text-[var(--foreground-soft)] underline-offset-4 hover:underline"
+                            >
+                              {syncedNotes[lot.id].excerpt}
+                            </Link>
+                          </>
+                        ) : (
+                          <>
+                            <p className="text-[11px] text-[var(--muted-foreground)]">
+                              No linked reading-notes section found yet.
+                            </p>
+                            <p className="mt-1.5 text-[12px] leading-relaxed text-[var(--foreground-soft)]">
+                              Save your weekly reading note, then it will appear here automatically.
+                            </p>
+                          </>
+                        )}
                       </div>
                       <p className="mt-3 text-[12px] leading-relaxed text-[var(--foreground-soft)]">
                         {lot.tagline}
                       </p>
                       <Link
-                        href={`/weekly/week-${lot.week}`}
+                        href={syncedNotes[lot.id] ? `/reading/${lot.id}` : `/weekly/week-${lot.week}`}
                         className="mt-4 inline-flex text-[12px] font-medium text-[var(--primary)] underline-offset-4 hover:underline"
                       >
-                        View Week Reflection
+                        {syncedNotes[lot.id] ? "Read Full Note" : "View Week Reflection"}
                       </Link>
                     </div>
                   </article>
