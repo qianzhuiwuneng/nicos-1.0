@@ -21,6 +21,7 @@ import {
   saveWeeklyReviewCloud,
 } from "@/lib/weekly-review-cloud";
 import { sanitizeRichHtml, toEditorHtml } from "@/lib/weekly-richtext";
+import { updateSurfacedLinesForWeek } from "@/lib/surfaced-lines-storage";
 
 function dispatchWeeklyReviewSaved() {
   if (typeof window !== "undefined") {
@@ -119,12 +120,13 @@ export function WeeklyReviewEditor({
           }
         }
       }
+      updateSurfacedLinesForWeek(programWeek, values, locale);
       setIsEditing(false);
       dispatchWeeklyReviewSaved();
     } catch {
       /* quota */
     }
-  }, [values, programWeek, cloudEnabled, t]);
+  }, [values, programWeek, cloudEnabled, t, locale]);
 
   const rangeLabel = bounds ? formatProgramWeekRangeLabel(bounds.weekStart, bounds.weekEnd, locale) : "";
   const programLabel = locale === "zh" ? `第 ${programWeek} 周` : `Week ${programWeek}`;

@@ -1,119 +1,45 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { useLanguage } from "@/context/LanguageContext";
 import { useWeek52Nav } from "@/context/Week52Context";
 import { getWeek52Entry } from "@/lib/week52-data";
 import { loadYearTheme } from "@/lib/yearThemeStorage";
-import { getWeeklyReviewPrompts } from "@/lib/weekly-review-prompts";
-import { loadWeeklyReviewValues, type WeeklyReviewValues } from "@/lib/weekly-review-storage";
-import { fetchWeeklyReviewCloud } from "@/lib/weekly-review-cloud";
-import { extractBoldSentences } from "@/lib/weekly-richtext";
-
-type SurfacedLine = {
-  id: string;
-  text: string;
-  week: number;
-  month: number;
-  sectionTitle: string;
-  link: string;
-};
-
-function mergeValues(remote: WeeklyReviewValues, local: WeeklyReviewValues): WeeklyReviewValues {
-  const out: WeeklyReviewValues = { ...local };
-  for (const [k, v] of Object.entries(remote)) {
-    if (typeof v === "string" && v.trim().length > 0) out[k] = v;
-  }
-  return out;
-}
-
-function pickExcerpt(source: string, max = 110): string {
-  const compact = source.replace(/\s+/g, " ").trim();
-  if (compact.length <= max) return compact;
-  return `${compact.slice(0, max).trimEnd()}…`;
-}
-
-function weekToMonth(week: number): number {
-  return Math.floor((Math.max(1, week) - 1) / 4) + 1;
-}
-
-function randomPick<T>(list: T[], excludeIndex?: number): { value: T; index: number } | null {
-  if (list.length === 0) return null;
-  if (list.length === 1) return { value: list[0], index: 0 };
-  let idx = Math.floor(Math.random() * list.length);
-  if (excludeIndex != null && idx === excludeIndex) idx = (idx + 1) % list.length;
-  return { value: list[idx], index: idx };
-}
+import {
+  getLastSurfacedLineId,
+  loadSurfacedLinePool,
+  pickRandomSurfacedLine,
+  setLastSurfacedLineId,
+  type SurfacedLine,
+} from "@/lib/surfaced-lines-storage";
 
 export default function DashboardPage() {
   const { t, locale } = useLanguage();
   const { focusWeek } = useWeek52Nav();
   const [yearTheme, setYearTheme] = useState("");
   const [linePool, setLinePool] = useState<SurfacedLine[]>([]);
-  const [activeLineIndex, setActiveLineIndex] = useState<number | null>(null);
+  const [activeLine, setActiveLine] = useState<SurfacedLine | null>(null);
 
   useEffect(() => {
     setYearTheme(loadYearTheme());
   }, []);
 
   useEffect(() => {
-    let cancelled = false;
-    async function run() {
-      const byWeek = new Map<number, WeeklyReviewValues>();
-      for (let week = 1; week <= 52; week += 1) {
-        const local = loadWeeklyReviewValues(week);
-        const remote = await fetchWeeklyReviewCloud(week);
-        byWeek.set(week, mergeValues(remote, local));
-      }
-
-      const built: SurfacedLine[] = [];
-      for (let week = 1; week <= 52; week += 1) {
-        const values = byWeek.get(week) ?? {};
-        const prompts = getWeeklyReviewPrompts(week, locale);
-        const promptMap = new Map(prompts.map((p) => [p.id, p.label]));
-        for (const [promptId, full] of Object.entries(values)) {
-          const text = (full ?? "").trim();
-          if (!text) continue;
-          const boldSentences = extractBoldSentences(text);
-          if (boldSentences.length === 0) continue;
-          const sectionTitle =
-            promptMap.get(promptId) ?? (locale === "zh" ? "周复盘条目" : "Weekly reflection section");
-          for (const sentence of boldSentences) {
-            built.push({
-              id: `line-w${week}-${promptId}-${sentence.slice(0, 16)}`,
-              text: pickExcerpt(sentence),
-              week,
-              month: weekToMonth(week),
-              sectionTitle,
-              link: `/weekly/week-${week}`,
-            });
-          }
-        }
-      }
-
-      if (!cancelled) {
-        setLinePool(built);
-        const picked = randomPick(built);
-        setActiveLineIndex(picked?.index ?? null);
-      }
-    }
-
-    void run();
-    return () => {
-      cancelled = true;
-    };
+    const pool = loadSurfacedLinePool();
+    setLinePool(pool);
+    const lastId = getLastSurfacedLineId();
+    const preferred = (lastId ? pool.find((line) => line.id === lastId) : undefined) ?? pool[0] ?? null;
+    setActiveLine(preferred);
+    if (preferred) setLastSurfacedLineId(preferred.id);
   }, [locale]);
 
-  const activeLine = useMemo(
-    () => (activeLineIndex == null ? null : (linePool[activeLineIndex] ?? null)),
-    [activeLineIndex, linePool]
-  );
-
   const onRefreshLine = () => {
-    const picked = randomPick(linePool, activeLineIndex ?? undefined);
-    if (picked) setActiveLineIndex(picked.index);
+    const picked = pickRandomSurfacedLine(linePool, activeLine?.id);
+    if (!picked) return;
+    setActiveLine(picked);
+    setLastSurfacedLineId(picked.id);
   };
 
   const currentWeek = getWeek52Entry(focusWeek);
