@@ -1,25 +1,70 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { monthlyReflections } from "@/lib/data";
 import { useLanguage } from "@/context/LanguageContext";
 
-export default function MonthlyPage() {
-  const { t } = useLanguage();
-  const [selectedId, setSelectedId] = useState<string | null>(monthlyReflections[0]?.id ?? null);
+const PROGRAM_START = new Date("2026-03-02T00:00:00");
 
-  const selected = monthlyReflections.find((m) => m.id === selectedId) ?? monthlyReflections[0];
+function toMonthKey(d: Date) {
+  return d.getFullYear() * 12 + d.getMonth();
+}
+
+function formatMonthLabel(date: Date, locale: "en" | "zh") {
+  if (locale === "zh") {
+    return `${date.getFullYear()}年${date.getMonth() + 1}月`;
+  }
+  return new Intl.DateTimeFormat("en-US", { month: "short", year: "numeric" }).format(date);
+}
+
+export default function MonthlyPage() {
+  const { t, locale } = useLanguage();
+
+  const reflectionItems = useMemo(() => {
+    return monthlyReflections
+      .map((reflection, index) => {
+        const monthDate = new Date(PROGRAM_START.getFullYear(), PROGRAM_START.getMonth() + index, 1);
+        const monthNumber = index + 1;
+        return {
+          ...reflection,
+          monthDate,
+          monthNumber,
+          programLabel:
+            locale === "zh"
+              ? `第 ${monthNumber} 个月 · ${formatMonthLabel(monthDate, "zh")}`
+              : `Month ${monthNumber} · ${formatMonthLabel(monthDate, "en")}`,
+        };
+      })
+      .sort((a, b) => b.monthDate.getTime() - a.monthDate.getTime());
+  }, [locale]);
+
+  const defaultSelectedId = useMemo(() => {
+    if (!reflectionItems.length) return null;
+    const nowKey = toMonthKey(new Date());
+    const elapsedMonthCount = nowKey - toMonthKey(new Date(PROGRAM_START.getFullYear(), PROGRAM_START.getMonth(), 1));
+    const clampedMonthNumber = Math.min(Math.max(elapsedMonthCount, 0), reflectionItems.length - 1) + 1;
+    return (
+      reflectionItems.find((item) => item.monthNumber === clampedMonthNumber)?.id ?? reflectionItems[0].id
+    );
+  }, [reflectionItems]);
+
+  const [selectedId, setSelectedId] = useState<string | null>(defaultSelectedId);
+
+  const selected = reflectionItems.find((m) => m.id === selectedId) ?? reflectionItems[0];
 
   return (
     <AppLayout
       title={t("monthly.title")}
       description={t("monthly.description")}
     >
+      <p className="mb-5 text-[12px] text-[var(--muted-foreground)]">
+        {locale === "zh" ? "项目开始于 2026.03.02" : "Program starts on 2026-03-02"}
+      </p>
       <div className="mb-8 flex flex-wrap gap-2">
-        {monthlyReflections.map((m) => (
+        {reflectionItems.map((m) => (
           <button
             key={m.id}
             type="button"
@@ -30,7 +75,7 @@ export default function MonthlyPage() {
                 : "border-[var(--border-subtle)] bg-[var(--card)] text-[var(--muted-foreground)] hover:border-[var(--border)] hover:text-[var(--foreground)]"
             }`}
           >
-            {m.month}
+            {m.programLabel}
           </button>
         ))}
       </div>
@@ -40,7 +85,7 @@ export default function MonthlyPage() {
           <Card className="border-[var(--border-subtle)]">
             <CardContent className="p-6">
               <h2 className="text-[17px] font-medium tracking-[-0.02em] text-[var(--foreground)]">
-                {selected.month}
+                {selected.programLabel}
               </h2>
               <div className="mt-3 flex flex-wrap gap-2">
                 {selected.keyword.map((k) => (
