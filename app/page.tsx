@@ -119,7 +119,7 @@ export default function DashboardPage() {
           </p>
           {activeLine ? (
             <>
-              <p className="mt-4 text-[15px] leading-[1.9] text-[var(--foreground)]/92">“{activeLine.text}”</p>
+              <p className="mt-4 text-[15px] leading-[1.9] text-[var(--foreground)]/92">{activeLine.text}</p>
               <p className="mt-3 text-[12px] text-[var(--muted-foreground)]">
                 {locale === "zh"
                   ? `来自第 ${activeLine.week} 周 · ${activeLine.sectionTitle}`
