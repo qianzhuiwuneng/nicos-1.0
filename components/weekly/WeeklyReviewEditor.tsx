@@ -133,8 +133,8 @@ export function WeeklyReviewEditor({
 
   return (
     <div className={className}>
-      <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
-        <div>
+      <div className="mb-6 flex flex-wrap items-end justify-between gap-3 max-lg:flex-col max-lg:items-stretch max-lg:gap-4 max-lg:mb-8">
+        <div className="max-lg:min-w-0">
           <h2
             id={headingId}
             className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--muted-foreground)]"
@@ -148,14 +148,14 @@ export function WeeklyReviewEditor({
             <span className="text-[var(--muted-foreground)]"> · </span>
             {programLabel}
           </p>
-          <p className="mt-1.5 text-[12px] leading-relaxed text-[var(--muted-foreground)]">
+          <p className="mt-1.5 text-[12px] leading-relaxed text-[var(--muted-foreground)] max-lg:mt-2 max-lg:text-[13px]">
             {t("weekly.footerHint")}
           </p>
         </div>
         {showOpenFullLink && (
           <Link
             href="/weekly"
-            className="text-[12px] font-medium text-[var(--muted-foreground)] underline-offset-4 transition-colors hover:text-[var(--foreground)] hover:underline"
+            className="text-[12px] font-medium text-[var(--muted-foreground)] underline-offset-4 transition-colors hover:text-[var(--foreground)] hover:underline max-lg:inline-flex max-lg:min-h-11 max-lg:items-center max-lg:text-[14px]"
           >
             {t("weekly.footerOpenFull")}
           </Link>
@@ -167,36 +167,36 @@ export function WeeklyReviewEditor({
           {t("weekly.footerNoPromptsThisWeek")}
         </p>
       ) : isEditing ? (
-        <div className="space-y-6">
+        <div className="space-y-6 max-lg:space-y-8">
           {prompts.map((p) => (
             <div
               key={p.id}
               id={`weekly-prompt-${p.id}`}
-              className="scroll-mt-[calc(4.25rem+0.75rem)]"
+              className="scroll-mt-[calc(4.25rem+0.75rem)] max-lg:scroll-mt-[calc(5rem+env(safe-area-inset-top))]"
             >
             <label className="block">
-              <span className="text-[14px] font-medium leading-snug text-[var(--foreground)]">
+              <span className="text-[14px] font-medium leading-snug text-[var(--foreground)] max-lg:text-[15px]">
                 {p.label}
               </span>
-              <div className="mt-3 rounded-[var(--radius-sm)] border border-[var(--border-subtle)] bg-[var(--background)]">
-                <div className="flex items-center gap-1 border-b border-[var(--border-subtle)] px-2 py-1.5">
+              <div className="mt-3 rounded-[var(--radius-sm)] border border-[var(--border-subtle)] bg-[var(--background)] max-lg:mt-4">
+                <div className="flex items-center gap-1 border-b border-[var(--border-subtle)] px-2 py-1.5 max-lg:gap-0.5 max-lg:px-1.5 max-lg:py-2">
                   <button
                     type="button"
-                    className="rounded px-2 py-1 text-[12px] text-[var(--muted-foreground)] hover:bg-[var(--muted)]"
+                    className="rounded px-2 py-1 text-[12px] text-[var(--muted-foreground)] hover:bg-[var(--muted)] max-lg:flex max-lg:min-h-10 max-lg:min-w-10 max-lg:items-center max-lg:justify-center max-lg:text-[13px]"
                     onClick={() => applyFormat(p.id, "bold")}
                   >
                     B
                   </button>
                   <button
                     type="button"
-                    className="rounded px-2 py-1 text-[12px] text-[var(--muted-foreground)] hover:bg-[var(--muted)]"
+                    className="rounded px-2 py-1 text-[12px] text-[var(--muted-foreground)] hover:bg-[var(--muted)] max-lg:flex max-lg:min-h-10 max-lg:min-w-10 max-lg:items-center max-lg:justify-center max-lg:text-[13px]"
                     onClick={() => applyFormat(p.id, "formatBlock", "P")}
                   >
                     P
                   </button>
                   <button
                     type="button"
-                    className="rounded px-2 py-1 text-[12px] text-[var(--muted-foreground)] hover:bg-[var(--muted)]"
+                    className="rounded px-2 py-1 text-[12px] text-[var(--muted-foreground)] hover:bg-[var(--muted)] max-lg:flex max-lg:min-h-10 max-lg:min-w-10 max-lg:items-center max-lg:justify-center max-lg:text-[13px]"
                     onClick={() => applyFormat(p.id, "formatBlock", "H3")}
                   >
                     H
@@ -212,7 +212,7 @@ export function WeeklyReviewEditor({
                   }}
                   contentEditable
                   suppressContentEditableWarning
-                  className="min-h-[8.5rem] w-full px-3 py-3 text-[14px] leading-[1.75] text-[var(--foreground)] outline-none"
+                  className="min-h-[8.5rem] w-full px-3 py-3 text-[14px] leading-[1.75] text-[var(--foreground)] outline-none max-lg:min-h-[10rem] max-lg:px-4 max-lg:py-4 max-lg:text-[16px]"
                   onInput={(e) => {
                     const html = (e.currentTarget as HTMLDivElement).innerHTML;
                     setField(p.id, sanitizeRichHtml(html));
@@ -222,14 +222,18 @@ export function WeeklyReviewEditor({
             </label>
             </div>
           ))}
-          <div className="pt-1">
-            <button type="button" onClick={() => void handleSave()} className="notion-save-btn">
+          <div className="pt-1 max-lg:pt-2">
+            <button
+              type="button"
+              onClick={() => void handleSave()}
+              className="notion-save-btn max-lg:min-h-11 max-lg:px-5 max-lg:text-[15px]"
+            >
               {t("weekly.footerSave")}
             </button>
           </div>
         </div>
       ) : (
-        <div className="rounded-[var(--radius)] border border-[var(--border-subtle)] bg-[var(--card)] p-6 shadow-[var(--shadow-card)]">
+        <div className="rounded-[var(--radius)] border border-[var(--border-subtle)] bg-[var(--card)] p-6 shadow-[var(--shadow-card)] max-lg:bg-[var(--card)]/80">
           <div className="mb-6 flex justify-end border-b border-[var(--border-subtle)] pb-4">
             <button
               type="button"
@@ -237,7 +241,7 @@ export function WeeklyReviewEditor({
                 setEditorInitial(values);
                 setIsEditing(true);
               }}
-              className="notion-edit-btn"
+              className="notion-edit-btn max-lg:min-h-11 max-lg:px-3 max-lg:text-[15px]"
             >
               {t("weekly.footerEdit")}
             </button>

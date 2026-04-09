@@ -78,7 +78,7 @@ export function Sidebar() {
   const { t } = useLanguage();
 
   return (
-    <aside className="fixed left-0 top-0 z-40 flex h-screen w-60 flex-col border-r border-[var(--border-subtle)] bg-[var(--sidebar-bg)] backdrop-blur-md">
+    <aside className="fixed left-0 top-0 z-40 hidden h-screen w-60 flex-col border-r border-[var(--border-subtle)] bg-[var(--sidebar-bg)] backdrop-blur-md lg:flex">
       <div className="flex h-[4.25rem] shrink-0 items-center justify-between gap-2 px-4">
         <Link
           href="/"

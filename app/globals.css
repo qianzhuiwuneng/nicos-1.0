@@ -94,6 +94,14 @@ body {
     color 200ms ease;
 }
 
+/* Phone-first reading size; desktop keeps slightly tighter rhythm */
+@media (max-width: 1023px) {
+  body {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+}
+
 ::selection {
   background: rgba(77, 89, 99, 0.22);
   color: var(--foreground);

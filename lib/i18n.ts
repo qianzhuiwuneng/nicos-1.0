@@ -52,6 +52,8 @@ export const translations = {
       description: "Only the present program week — goals, practice, and reflection in one calm view.",
       phaseLabel: "Phase",
       openMap: "Browse other weeks in Year journey",
+      prevWeek: "Previous week",
+      nextWeek: "Next week",
     },
     becoming: {
       title: "Becoming",
@@ -246,6 +248,15 @@ export const translations = {
       themeToDark: "Switch to dark mode",
       themeToLight: "Switch to light mode",
     },
+    mobile: {
+      openMenu: "Open menu",
+      menuTitle: "Navigation",
+      bottomNavAria: "Primary shortcuts",
+      bottomNow: "Now",
+      bottomWeek: "Week",
+      bottomRead: "Read",
+      bottomMemory: "Lines",
+    },
   },
   zh: {
     nav: {
@@ -298,6 +309,8 @@ export const translations = {
       description: "只呈现当前的方案周——目标、练习与复盘，聚在一页。",
       phaseLabel: "阶段",
       openMap: "在全年旅程中浏览其他周",
+      prevWeek: "上一周",
+      nextWeek: "下一周",
     },
     becoming: {
       title: "成为",
@@ -488,6 +501,15 @@ export const translations = {
       close: "关闭",
       themeToDark: "切换到深色模式",
       themeToLight: "切换到浅色模式",
+    },
+    mobile: {
+      openMenu: "打开目录",
+      menuTitle: "目录",
+      bottomNavAria: "常用入口",
+      bottomNow: "此刻",
+      bottomWeek: "本周",
+      bottomRead: "阅读",
+      bottomMemory: "浮现",
     },
   },
 } as const;

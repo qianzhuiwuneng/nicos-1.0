@@ -53,7 +53,8 @@ export default function DashboardPage() {
 
   return (
     <AppLayout title={t("home.title")} description={t("home.description")} narrow>
-      <div className="mx-auto max-w-[42rem] pb-20 pt-2">
+      {/* Desktop: unchanged from pre-mobile git HEAD */}
+      <div className="mx-auto hidden max-w-[42rem] pb-20 pt-2 lg:block">
         <p className="max-w-xl text-[15px] leading-[1.9] text-[var(--foreground)]/88">
           {t("home.opener")}
         </p>
@@ -149,6 +150,107 @@ export default function DashboardPage() {
             </p>
           )}
         </section>
+      </div>
+
+      {/* Mobile */}
+      <div className="mx-auto max-w-[42rem] pb-12 pt-1 lg:hidden">
+        <p className="max-w-xl text-[1rem] leading-[1.85] text-[var(--foreground)]/88">
+          {t("home.opener")}
+        </p>
+
+        <div className="mt-14 flex flex-col gap-14">
+          <section className="order-3 border-t border-[var(--border-subtle)] pt-10">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--muted-foreground)]">
+              {t("home.yearThemeLine")}
+            </p>
+            <p className="mt-3 text-[1rem] leading-[1.82] text-[var(--foreground)]/90">
+              {yearTheme || t("home.yearThemeUnset")}
+            </p>
+          </section>
+
+          <section className="order-4 border-t border-[var(--border-subtle)] pt-10">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--muted-foreground)]">
+              {t("home.thisWeekLabel")}
+            </p>
+            <p className="mt-3 text-[1rem] leading-relaxed text-[var(--foreground)]/90">
+              {locale === "zh" ? `第 ${focusWeek} 周` : `Week ${focusWeek}`}
+              {thisWeekTitle && (
+                <>
+                  <span className="text-[var(--muted-foreground)]"> · </span>
+                  {thisWeekTitle}
+                </>
+              )}
+            </p>
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-x-8 sm:gap-y-2">
+              <Link
+                href="/this-week"
+                className="inline-flex min-h-11 items-center text-[15px] font-medium text-[var(--foreground)] underline-offset-4 hover:underline"
+              >
+                {t("home.openThisWeek")}
+              </Link>
+              <Link
+                href={`/journey?week=${focusWeek}`}
+                className="inline-flex min-h-11 items-center text-[15px] font-medium text-[var(--foreground)] underline-offset-4 hover:underline"
+              >
+                {t("home.openJourney")}
+              </Link>
+              <Link
+                href="/insights/memory"
+                className="inline-flex min-h-11 items-center text-[15px] font-medium text-[var(--muted-foreground)] underline-offset-4 hover:text-[var(--foreground)] hover:underline"
+              >
+                {t("nav.memorySurface")}
+              </Link>
+            </div>
+          </section>
+
+          <section className="order-5 border-t border-[var(--border-subtle)] pt-10">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--muted-foreground)]">
+              {t("home.archiveHint")}
+            </p>
+            <p className="mt-3 max-w-xl text-[15px] leading-[1.85] text-[var(--muted-foreground)]">
+              {locale === "zh"
+                ? "回到阅读、观影与周复盘札记。让已经发生的事慢慢变得更清楚。"
+                : "Return to reading, watching, and weekly reflection notes. Let what already happened become clearer over time."}
+            </p>
+          </section>
+
+          <section className="order-2 border-t border-[var(--border-subtle)] pt-10">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--muted-foreground)]">
+              {locale === "zh" ? "此刻一句" : "A Line for Now"}
+            </p>
+            {activeLine ? (
+              <>
+                <p className="mt-5 text-[1.05rem] leading-[1.88] text-[var(--foreground)]/92">{activeLine.text}</p>
+                <p className="mt-4 text-[13px] leading-relaxed text-[var(--muted-foreground)]">
+                  {locale === "zh"
+                    ? `来自第 ${activeLine.week} 周 · ${activeLine.sectionTitle}`
+                    : `From Week ${activeLine.week} · ${activeLine.sectionTitle}`}
+                </p>
+                <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-x-8 sm:gap-y-2">
+                  <button
+                    type="button"
+                    onClick={onRefreshLine}
+                    className="inline-flex min-h-11 items-center text-left text-[15px] font-medium text-[var(--muted-foreground)] underline-offset-4 hover:text-[var(--foreground)] hover:underline"
+                  >
+                    {locale === "zh" ? "换一句" : "Refresh"}
+                  </button>
+                  <Link
+                    href={activeLine.link}
+                    className="inline-flex min-h-11 items-center text-[15px] font-medium text-[var(--foreground)] underline-offset-4 hover:underline"
+                  >
+                    {locale === "zh" ? "打开来源" : "Open Source"}
+                  </Link>
+                </div>
+              </>
+            ) : (
+              <p className="mt-5 text-[15px] leading-relaxed text-[var(--muted-foreground)]">
+                {locale === "zh"
+                  ? "还没有可浮现的句子。先在周复盘里保存阅读感悟。"
+                  : "No surfaceable line yet. Save reflection lines in weekly notes first."}
+              </p>
+            )}
+          </section>
+        </div>
       </div>
     </AppLayout>
   );
