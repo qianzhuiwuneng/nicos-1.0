@@ -33,3 +33,17 @@ export function saveWeeklyReviewValues(programWeek: number, values: WeeklyReview
 export function hasAnyValue(values: WeeklyReviewValues, promptIds: string[]): boolean {
   return promptIds.some((id) => (values[id] ?? "").trim().length > 0);
 }
+
+export function hasAnyStoredValue(values: WeeklyReviewValues): boolean {
+  return Object.values(values).some((v) => v.trim().length > 0);
+}
+
+export function getLocallyCompletedProgramWeeks(maxWeek = 52): Set<number> {
+  if (typeof window === "undefined") return new Set<number>();
+  const out = new Set<number>();
+  for (let week = 1; week <= maxWeek; week += 1) {
+    const values = loadWeeklyReviewValues(week);
+    if (hasAnyStoredValue(values)) out.add(week);
+  }
+  return out;
+}

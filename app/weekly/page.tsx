@@ -9,14 +9,23 @@ import { useLanguage } from "@/context/LanguageContext";
 import { useWeek52Nav } from "@/context/Week52Context";
 import { formatProgramWeekRangeLabel } from "@/lib/program-week";
 import { getWeeklyReviewPrompts } from "@/lib/weekly-review-prompts";
-import { type WeeklyReviewValues, loadWeeklyReviewValues } from "@/lib/weekly-review-storage";
-import { fetchWeeklyReviewCloud, mergeRemoteAndLocal } from "@/lib/weekly-review-cloud";
+import {
+  type WeeklyReviewValues,
+  getLocallyCompletedProgramWeeks,
+  loadWeeklyReviewValues,
+} from "@/lib/weekly-review-storage";
+import {
+  fetchWeeklyCompletedWeeksCloud,
+  fetchWeeklyReviewCloud,
+  mergeRemoteAndLocal,
+} from "@/lib/weekly-review-cloud";
 
 export default function WeeklyPage() {
   const { t, locale } = useLanguage();
   const { focusWeek } = useWeek52Nav();
   const [selectedId, setSelectedId] = useState<string>(`w${focusWeek}`);
   const [dataRev, setDataRev] = useState(0);
+  const [completedWeeks, setCompletedWeeks] = useState<Set<number>>(new Set<number>());
 
   useEffect(() => {
     setSelectedId(`w${focusWeek}`);
@@ -61,6 +70,22 @@ export default function WeeklyPage() {
     };
   }, [selected.programWeek, prompts, dataRev]);
 
+  useEffect(() => {
+    let cancelled = false;
+    const localSet = getLocallyCompletedProgramWeeks(52);
+    setCompletedWeeks(localSet);
+    (async () => {
+      const cloudSet = await fetchWeeklyCompletedWeeksCloud();
+      if (cancelled) return;
+      const merged = new Set<number>(localSet);
+      for (const w of cloudSet) merged.add(w);
+      setCompletedWeeks(merged);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [dataRev]);
+
   const rangeLabel = formatProgramWeekRangeLabel(selected.weekStart, selected.weekEnd, locale);
   const programLabel = locale === "zh" ? `第 ${selected.programWeek} 周` : `Week ${selected.programWeek}`;
 
@@ -82,7 +107,17 @@ export default function WeeklyPage() {
                       : "text-[var(--muted-foreground)] hover:bg-[var(--muted)]/60 hover:text-[var(--foreground)]"
                   }`}
                 >
-                  <span className="block">{label}</span>
+                  <span className="flex items-center justify-between gap-2">
+                    <span className="block">{label}</span>
+                    <span
+                      className={`h-1.5 w-1.5 shrink-0 rounded-full ${
+                        completedWeeks.has(w.programWeek)
+                          ? "bg-[var(--primary)]"
+                          : "bg-[var(--border)]"
+                      }`}
+                      aria-hidden
+                    />
+                  </span>
                   <span className="mt-0.5 block text-[10px] font-normal opacity-80">
                     {locale === "zh" ? `第 ${w.programWeek} 周` : `W${w.programWeek}`}
                   </span>

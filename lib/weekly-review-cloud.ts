@@ -51,6 +51,26 @@ export async function fetchWeeklyReviewCloud(programWeek: number): Promise<Weekl
   }
 }
 
+export async function fetchWeeklyCompletedWeeksCloud(): Promise<Set<number>> {
+  if (!isCloudEnabled()) return new Set<number>();
+  try {
+    const res = await fetch("/api/weekly-review?summary=1", {
+      method: "GET",
+      cache: "no-store",
+    });
+    if (!res.ok) return new Set<number>();
+    const json = (await res.json()) as { weeks?: unknown };
+    const arr = Array.isArray(json?.weeks) ? json.weeks : [];
+    const out = new Set<number>();
+    for (const w of arr) {
+      if (typeof w === "number" && Number.isFinite(w)) out.add(w);
+    }
+    return out;
+  } catch {
+    return new Set<number>();
+  }
+}
+
 export async function saveWeeklyReviewCloud(
   programWeek: number,
   values: WeeklyReviewValues,

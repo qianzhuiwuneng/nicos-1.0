@@ -24,6 +24,25 @@ export async function GET(request: Request) {
   if (!client) return NextResponse.json({ values: {} }, { status: 200 });
 
   const { searchParams } = new URL(request.url);
+  const wantsSummary = searchParams.get("summary") === "1";
+
+  if (wantsSummary) {
+    const { data, error } = await client
+      .from("weekly_reviews")
+      .select("program_week, values");
+    if (error || !data) return NextResponse.json({ weeks: [] }, { status: 200 });
+
+    const weeks = data
+      .filter((row) => {
+        const values = (row as { values?: Record<string, unknown> }).values;
+        if (!values || typeof values !== "object") return false;
+        return Object.values(values).some((v) => typeof v === "string" && v.trim().length > 0);
+      })
+      .map((row) => (row as { program_week: number }).program_week);
+
+    return NextResponse.json({ weeks }, { status: 200 });
+  }
+
   const week = parseInt(searchParams.get("week") ?? "", 10);
   if (Number.isNaN(week) || week < 1 || week > 52) {
     return NextResponse.json({ error: "invalid week" }, { status: 400 });
